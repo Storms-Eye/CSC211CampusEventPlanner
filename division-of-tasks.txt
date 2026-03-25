@@ -1,0 +1,53 @@
+Daniel
+- Basic: Capacity limits
+- Advanced: Waitlist system
+Joseph
+- Basic: Event creation and listing
+- Advanced: Search/filter tools
+Brady
+- Basic: Registration System
+- Advanced: QR/Check-in System
+Sam
+- Basic:
+- Advanced:
+Allen
+- Basic:
+- Advanced:
+
+Passes Method
+- Pass 1: Entities
+	- Students
+	- Admins
+	- Interface
+	- Moderator
+	- Event
+	- Event List
+	- Event Log
+	- Users
+	- Capacity Limit
+	- Waitlist
+	- Event Queue
+	- QR Acceptor
+	- Attendance Dashboard
+- Pass 2: Actions
+	- Submit Event (Moderator)
+	- Accept/Deny (Admin)
+	- Access Event List (allAccess)
+	- Access Even Log (AdminOnly)
+	- Register for Even (Student)
+	- Enforce Limit 
+	- Waitlist for Users (Admin)
+			- (Days Until Event) - (Days Since Request)
+			- Days Until Event < 5: High priority
+	- Check In
+	- Submit Attendance
+- Pass 3: Responsibilities
+	- Events own Capacity Limit, Waitlist, QR Acceptor
+	- Event List, Event Log, and Users are owned by Interface
+	- Admin owns Event Queue
+	- Moderator owns Event
+	- Attendance Dashboard owned by Student
+- Pass 4: Variation Points
+	- Event List
+	- Event LogG
+	- Users (Moderators)
