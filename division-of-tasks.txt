@@ -8,11 +8,11 @@ Brady
 - Basic: Registration System
 - Advanced: QR/Check-in System
 Sam
-- Basic:
-- Advanced:
+- Basic: User history
+- Advanced: Event History
 Allen
-- Basic:
-- Advanced:
+- Basic: Admin vs user roles
+- Advanced: Attendance dashboard
 
 Passes Method
 - Pass 1: Entities
