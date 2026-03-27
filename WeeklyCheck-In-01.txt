@@ -52,11 +52,19 @@ Data Structure
 		- ID
 		- pin
 		- role
+        - "attendanceHistory"
+            - eventName
+            - date
+            - attended
 	- Students
 		- name
 		- ID
 		- pin
 		- role
+        - "attendanceHistory"
+            - eventName: String
+            - date: String
+            - attended: bool
 Again, invidiual submission just requires us to submit what parts of this structure we're working on
 
 API routes
