@@ -53,9 +53,9 @@ Data Structure
 		- pin
 		- role
         - "attendanceHistory"
-            - eventName
-            - date
-            - attended
+            - eventName: String
+            - date: String
+            - attended: bool
 	- Students
 		- name
 		- ID
