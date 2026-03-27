@@ -1,0 +1,32 @@
+{
+	"meta": {
+		"nextPendingEventId": 1,
+		"nextApprovedEventId": 1,
+		"nextUserId": 1,
+		"nextTransactionId": 1
+	},
+	"eventWaitlist": [
+	{
+	
+	}],
+	"userWaitlist": [
+	{
+	
+	}],
+	"approvedEvents": [
+	{
+	
+	}],
+	"eventHistory": [
+	{
+	
+	}],
+	"transactions": [
+	{
+	
+	}],
+	"attendance": [
+	{
+	
+	}]
+}

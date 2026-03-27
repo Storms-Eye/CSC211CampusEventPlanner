@@ -1,0 +1,3 @@
+/home/student2025/Desktop/CSC211_S26/FinalProject/build/CMakeFiles/final-server.dir
+/home/student2025/Desktop/CSC211_S26/FinalProject/build/CMakeFiles/edit_cache.dir
+/home/student2025/Desktop/CSC211_S26/FinalProject/build/CMakeFiles/rebuild_cache.dir

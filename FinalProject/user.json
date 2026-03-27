@@ -1,0 +1,26 @@
+[
+	{
+	"id": "0202020",
+	"name": "John Jacob Jingleheimer Schmidt",
+	"role": "admin",
+	"pin": "3141"
+	},
+	{
+	"id": "0909628",
+	"name": "George Washington",
+	"role": "moderator",
+	"pin": "1234"
+	},
+	{
+	"id": "1234567",
+	"name": "Thing 1",
+	"role": "student",
+	"pin": "0000"
+	},
+	{
+	"id": "7654321",
+	"name": "Thing 2",
+	"role": "student",
+	"pin": "1111"
+	}
+]
