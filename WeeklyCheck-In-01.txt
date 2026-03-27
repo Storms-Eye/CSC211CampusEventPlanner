@@ -13,6 +13,7 @@ Project Scope
 	- List user waitlist
 	- Use QR code system as a student to check-in to an event
 	- Be able to see an attendance dashboard for any currently approved event
+For individual submissions, just submit what parts you are working on
 
 Roles
 - Admin
@@ -29,6 +30,7 @@ Roles
 	- Can see the list of currently approved events
 	- Can register for any one of these events (if capacity is not full)
 	- Can use QR system to check-in to an event
+Also submit your own role
 
 Data Structure
 - data.json
@@ -55,6 +57,7 @@ Data Structure
 		- ID
 		- pin
 		- role
+Again, invidiual submission just requires us to submit what parts of this structure we're working on
 
 API routes
 - GET ROUTES
@@ -77,6 +80,7 @@ API routes
 - DELETE ROUTES
 	- Deny events; DELETE (soft delete)
 	- Remove denied events; DELETE (hard delete)
+Again, invidiual submission just requires us to submit what parts we're working on
 
 Curl Routes for Basic Crow Server (at the time of writing, first draft)
 - curl -X GET http://localhost:18080/
