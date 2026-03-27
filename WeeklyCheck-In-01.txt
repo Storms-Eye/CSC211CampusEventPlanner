@@ -1,0 +1,95 @@
+Project Scope
+- In our project, we should be able to:
+	- Create new events
+	- List current approved events
+	- List waitlist of events waiting to be approved or denied
+	- List a history of past events
+	- Approve events
+	- Deny events
+	- List the history of events a student has attended or not attended
+	- Register for an event
+		- If the event's capacity is full, student should be barred from joining event
+		- Otherwise, they are added to a user waitlist
+	- List user waitlist
+	- Use QR code system as a student to check-in to an event
+	- Be able to see an attendance dashboard for any currently approved event
+
+Roles
+- Admin
+	- Approves or denies events in the waitlist
+	- Can see the history of past events
+	- Can see the attendance dashboard
+- Moderator
+	- Creates new events
+	- Can see waitlist but cannot approve or deny events
+	- Can list events they themselves have attended
+	- Can see the attendance dashboard
+- Student
+	- Can see the history of event they have attended in the past
+	- Can see the list of currently approved events
+	- Can register for any one of these events (if capacity is not full)
+	- Can use QR system to check-in to an event
+
+Data Structure
+- data.json
+	- "eventWaitlist"
+	- "userWaitlist"
+	- "approvedEvents"
+	- "eventHistory"
+	- "transactions" (includes approval, denial, registration, and check-in)
+	- "attendance" (counts how many who registered did attend vs. how many did not)
+
+- user.json
+	- Admin(s)
+		- name
+		- ID
+		- pin
+		- role
+	- Moderator(s)
+		- name
+		- ID
+		- pin
+		- role
+	- Students
+		- name
+		- ID
+		- pin
+		- role
+
+API routes
+- GET ROUTES
+	- Get event waitlist; GET (collection)
+	- Get user waitlist; GET (collection)
+	- Get currently approved events; GET (collection)
+	- Get event history; GET (collection)
+	- Get transactions; GET (collection)
+	- Get attendance record; GET (collection)
+	- Get information on admin, moderator, or student; GET (single resource)
+- POST ROUTES
+	- Create new event; POST
+- PATCH ROUTES
+	- Event approval/denial status; PATCH (partial revision)
+	- Register for event (registered/unregistered); PATCH
+	- QR Check-in (checkedIn/!checkedIn); PATCH
+	- Attendance (didAttend/didNotAttend); PATCH
+- PUT ROUTES
+	- Event replacement at same ID; PUT (full replacement)
+- DELETE ROUTES
+	- Deny events; DELETE (soft delete)
+	- Remove denied events; DELETE (hard delete)
+
+Curl Routes for Basic Crow Server (at the time of writing, first draft)
+- curl -X GET http://localhost:18080/
+	- Displays server frontend
+- curl -X GET http://localhost:18080/eventWaitlist
+	- Gets waitlist of events waiting to be approved or denied
+- curl -X GET http://localhost:18080/userWaitlist
+	- Gets waitlist of users waiting for their registration to be accepted
+- curl -X GET http://localhost:18080/approvedEvents
+	- Gets list of currently approved events
+- curl -X GET http://localhost:18080/eventHistory
+	- Gets list of all past events
+- curl -X GET http://localhost:18080/transactions
+	- Gets list of all transactions in the database
+- curl -X GET http://localhost:18080/attendance
+	- Gets records of event attendance
