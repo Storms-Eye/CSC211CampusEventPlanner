@@ -62,6 +62,12 @@ class JsonRepository {
 			std::ofstream out(filename);
 			out << database.dump(4);
 		}
+
+        void saveUsers()
+        {
+			std::ofstream out(userfilename);
+			out << users.dump(4);
+		}
 		
 		json getEventWaitlist(){
 			return database.value("eventWaitList", json::array());
@@ -93,7 +99,71 @@ class JsonRepository {
 			return json(); //maybe this doesn't need for loop?
 		}
 		json getValuesByFunction(json& dataset, auto func, int variable);
-		json getValuesByFunction(json& dataset, auto func, std::string variable); 
+		json getValuesByFunction(json& dataset, auto func, std::string variable);
+
+        void eventHistoryUpdate(int eventID)
+        {
+			json event;
+            for(auto& data : database["approvedEvents"])
+            {
+                if(data["EventId"] == eventID)
+                {
+                    event = data;
+                }
+            }
+
+            int capacity = event["Capacity"];
+            for(auto& data : event["Waitlist"])
+            {
+                if(capacity > 0)
+                {
+                    data["attendance"] = "Attended";
+                    capacity--;
+                }
+
+                else
+                {
+                    data["attendance"] = "Waitlisted";
+                }
+                
+            }
+
+            for(auto& data : event["Waitlist"])
+            {
+                userHistoryUpdate(data["userId"], eventID);
+            }
+            
+            auto& events = database["approvedEvents"];
+
+            // Remove event from approved events
+            for(auto it = events.begin(); it != events.end(); ++it)
+            {
+                if((*it)["EventId"] == eventID)
+                {
+                    events.erase(it);
+                    save();
+                }
+            }
+            
+            database["eventHistory"].push_back(event);
+            save();
+        }
+
+        void userHistoryUpdate(int userID, int eventID)
+        {
+            json event;
+            for(auto& data : database["approvedEvents"])
+            {
+                if(data["EventId"] == eventID)
+                {
+                    event = data;
+                }
+            }
+            
+            json user = getValueById(users, "id", userID);
+            user["events"].push_back(event);
+            saveUsers();
+        }
 };
 
 //----------------------------
@@ -116,42 +186,51 @@ int main() {
 	CROW_ROUTE(app, "/eventWaitlist")
 		.methods("GET"_method)
 	([&repo]() {
-		return crow::response(repo.getEventWaitlist().dump());
+		return crow::response(repo.getEventWaitlist().dump(4));
 	});
 	
 	// GET waitlist of users waiting for their registration to be accepted
 	CROW_ROUTE(app, "/userWaitlist")
 		.methods("GET"_method)
 	([&repo]() {
-		return crow::response(repo.getUserWaitlist().dump());
+		return crow::response(repo.getUserWaitlist().dump(4));
 	});
 	
 	// GET list of currently approved events
 	CROW_ROUTE(app, "/approvedEvents")
 		.methods("GET"_method)
 	([&repo]() {
-		return crow::response(repo.getApprovedEvents().dump());
+		return crow::response(repo.getApprovedEvents().dump(4));
 	});
 
 	// GET list of all past events
 	CROW_ROUTE(app, "/eventHistory")
 		.methods("GET"_method)
 	([&repo]() {
-		return crow::response(repo.getEventHistory().dump());
+		return crow::response(repo.getEventHistory().dump(4));
 	});
 	
 	// GET list of all transactions in the database
 	CROW_ROUTE(app, "/transactions")
 		.methods("GET"_method)
 	([&repo]() {
-		return crow::response(repo.getAllTransactions().dump());
+		return crow::response(repo.getAllTransactions().dump(4));
 	});
 	
 	// GET records of event attendance
 	CROW_ROUTE(app, "/attendance")
 		.methods("GET"_method)
 	([&repo]() {
-		return crow::response(repo.getAttendance().dump());
+		return crow::response(repo.getAttendance().dump(4));
+	});
+    
+    // POST to update eventHistory
+	CROW_ROUTE(app, "/updateEventHistory/<int>")
+		.methods("POST"_method)
+	([&repo](int eventID) {
+        eventHistoryUpdate(eventID);
+        return crow::response(200, "Event history updated");
+        
 	});
 	
 	app.port(18080).multithreaded().run();
