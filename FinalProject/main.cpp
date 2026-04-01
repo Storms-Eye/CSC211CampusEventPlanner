@@ -12,8 +12,9 @@ class JsonRepository {
 		json database;
 		json users;
 	public:
-		JsonRepository(const std::string& file, const std::string& userFile) 
-										: filename(file), userfilename(userFile) {
+		JsonRepository(const std::string& file, const std::string& userFile)
+		:filename(file), userfilename(userFile) 
+		{
 			load();
 		}
 
@@ -26,7 +27,15 @@ class JsonRepository {
 			{
 				// Initialize if file missing
 				database = {
-					{"meta", {{"nextPendingEventID", 1}, {"nextApprovedEventId", 1}, {"nextUserId", 1}, {"nextTransactionId", 1}}},
+					{"meta",
+						{
+							{"availableIndexes": json::array()},
+							{"nextPendingEventID", 1},
+							{"nextApprovedEventId", 1},
+							{"nextUserId", 1},
+							{"nextTransactionId", 1}
+						}
+					},
 					{"eventWaitlist", json::array()},
 					{"userWaitlist", json::array()},
 					{"approvedEvents", json::array()},
@@ -72,6 +81,19 @@ class JsonRepository {
 		json getAttendance(){
 			return database.value("attendance", json::array());
 		}
+		json& getValueById(json& dataset, std::string reference, int id)
+		{
+			for(auto& value : dataset)
+			{
+				if(value[reference] == id)
+				{
+					return value;
+				}
+			}
+			return json(); //maybe this doesn't need for loop?
+		}
+		json getValuesByFunction(json& dataset, auto func, int variable);
+		json getValuesByFunction(json& dataset, auto func, std::string variable); 
 };
 
 //----------------------------

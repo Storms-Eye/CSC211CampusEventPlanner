@@ -1,21 +1,32 @@
 {
 	"meta": {
-		"nextPendingEventId": 1,
-		"nextApprovedEventId": 1,
+		"availableIndexes": [],
+		"nextPendingEventId": 2,
+		"nextApprovedEventId": 2,
 		"nextUserId": 1,
 		"nextTransactionId": 1
 	},
 	"eventWaitlist": [
 	{
-	
+		{
+			"Description": "Name of event and why it needs to happen",			
+			"Waitlist": [],
+			"Capacity": 40,
+			"EventId": 1
+		}	
 	}],
 	"userWaitlist": [
 	{
-	
+			
 	}],
 	"approvedEvents": [
 	{
-	
+		{
+			"Description": "Name of event and why it needs to happen",			
+			"Waitlist": ["1234567", "0909628"],
+			"Capacity": 15,
+			"EventId": 1
+		}		
 	}],
 	"eventHistory": [
 	{
