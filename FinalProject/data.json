@@ -21,9 +21,16 @@
 		{
 			"Description": "Name of event and why it needs to happen",
 			"Waitlist": [
-				"1234567",
-				"0909628"
+				{
+					"userId": "1234567",
+					"attendance": "Attending"
+				},
+				{
+					"userId": "7654321",
+					"attendance": "Attending"
+				}
 			],
+			"totalUsers": 2,
 			"Capacity": 15,
 			"EventId": 1
 		}
