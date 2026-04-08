@@ -104,6 +104,8 @@ class JsonRepository {
         void eventHistoryUpdate(int eventID)
         {
 			json event;
+
+			// Search for event
             for(auto& data : database["approvedEvents"])
             {
                 if(data["EventId"] == eventID)
@@ -112,6 +114,7 @@ class JsonRepository {
                 }
             }
 
+			// Change capacity
             int capacity = event["Capacity"];
             for(auto& data : event["Waitlist"])
             {
@@ -128,11 +131,12 @@ class JsonRepository {
                 
             }
 
+			// Update the user history alongside change
             for(auto& data : event["Waitlist"])
             {
                 userHistoryUpdate(data["userId"], eventID);
             }
-            
+
             auto& events = database["approvedEvents"];
 
             // Remove event from approved events
