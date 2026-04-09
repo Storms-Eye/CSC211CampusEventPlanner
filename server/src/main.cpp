@@ -1,47 +1,71 @@
-#include <crow.h>
-#include "json-repository.h"
 #include "event.h"
+#include "json-repository.h"
+#include <crow.h>
 
 using json = nlohmann::json;
 
-int main() {
-	crow::SimpleApp app;
+int main()
+{
+    crow::SimpleApp app;
 
-	JsonRepository repo("./data.json", "../user.json");
-	
-	//Server Frontend
-	CROW_ROUTE(app, "/")([](){
-		return crow::response("<html><body><h1>Welcome to Super Awesome Team Name's Final Project</h1></body></html>"); 
-		// this will not be the final display, btw
-		// unless we want it to be
-		// but I would think we'd want it to be a little more official
-	});
+    JsonRepository repo("./data.json", "../user.json");
 
-	EventManager::registerEventRoutes(app, repo);
+    // Server Frontend
+    CROW_ROUTE(app, "/")([]()
+    {
+        return crow::response("<html><body><h1>Welcome to Super Awesome Team Name's Final Project</h1></body></html>");
+        // this will not be the final display, btw
+        // unless we want it to be
+        // but I would think we'd want it to be a little more official
+    });
 
+    EventManager::registerEventRoutes(app, repo);
 
-	// TODO: Move these routes into their own managers (user manager, event manager, etc).
-	
-	// GET waitlist of users waiting for their registration to be accepted
-	CROW_ROUTE(app, "/userWaitlist")
-		.methods("GET"_method)
-	([&repo]() {
-		return crow::response(repo.getUserWaitlist().dump(4));
-	});
-	
-	// GET list of all transactions in the database
-	CROW_ROUTE(app, "/transactions")
-		.methods("GET"_method)
-	([&repo]() {
-		return crow::response(repo.getAllTransactions().dump(4));
-	});
-	
-	// GET records of event attendance
-	CROW_ROUTE(app, "/attendance")
-		.methods("GET"_method)
-	([&repo]() {
-		return crow::response(repo.getAttendance().dump(4));
-	});
-	
-	app.port(18080).multithreaded().run();
+    // TODO: Move these routes into their own managers (user manager, event manager, etc).
+
+    // GET waitlist of users waiting for their registration to be accepted
+    CROW_ROUTE(app, "/userWaitlist")
+        .methods("GET"_method)([&repo]()
+    {
+        return crow::response(repo.getUserWaitlist().dump(4));
+    });
+
+    // GET list of all transactions in the database
+    CROW_ROUTE(app, "/transactions")
+        .methods("GET"_method)([&repo]()
+    {
+        return crow::response(repo.getAllTransactions().dump(4));
+    });
+
+    // GET records of event attendance
+    CROW_ROUTE(app, "/attendance")
+        .methods("GET"_method)([&repo]()
+    {
+        return crow::response(repo.getAttendance().dump(4));
+    });
+
+    // REGISTRATION FUNCTION - also not my particular field, just showing how capacity limit will be enforced
+    // URL may need to be adjusted
+    CROW_ROUTE(app, "/register/<int>")
+        .methods("......"_method)([&repo](const crow::request &req, int id)
+    {
+        // all of what the other team members will add...
+
+        // ...
+
+        bool isEventFull(id, item["Capacity"].get<int>(), item["totalUsers"].get<int>());
+
+        // if the event is full, waitlist the student
+        // if not, add them as an attendee
+        if (isEventFull)
+        {
+            student["attendance"] = "Waitlisted";
+        }
+        else
+        {
+            student["attendance"] = "Attending";
+        }
+    });
+
+    app.port(18080).multithreaded().run();
 }

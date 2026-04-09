@@ -57,6 +57,142 @@ void JsonRepository::saveUsers()
     out << users.dump(4);
 }
 
+bool JsonRepository::validID(const std::string &userID)
+{
+    // if the ID is not 7 digits long, it is not valid
+    if (userID.length() != 7)
+    {
+        return false;
+    }
+    // if it contains any letters or special characters, it is not valid
+    for (char c : userID)
+    {
+        if (!std::isdigit(static_cast<unsigned char>(c)))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Uses both user's ID and pin to authenticate them
+json JsonRepository::authenticateUser(const std::string &userID, const std::string &pin)
+{
+    // if the ID is not valid, return empty json
+    if (!validID(userID))
+    {
+        return json();
+    }
+    for (auto &user : users)
+    {
+        // Pin and ID must belong to the same user
+        if (user["id"] == userID && user["pin"] == pin)
+        {
+            return user;
+        }
+    }
+    return json();
+}
+
+// checking if the user is a moderator in order to be able to POST events
+bool JsonRepository::canPostEvents(const json &user)
+{
+    if (user.is_null())
+    {
+        return false;
+    }
+    std::string role = user["role"];
+    return role == "moderator";
+}
+
+// checking if the user is an admin
+bool JsonRepository::isAdmin(const json &user)
+{
+    if (user.is_null())
+    {
+        return false;
+    }
+    std::string role = user["role"];
+    return role == "admin";
+}
+
+// checks if an event has been approved or denied by an admin
+// if approved, delete the item from "eventWaitlist" and add to "approvedEvents"
+// if denied, delete the item from "eventWaitlist" and add to "eventHistory"
+json JsonRepository::approvalFunc(int id, bool isApproved)
+{
+    auto &eventWaitlist = database["eventWaitlist"];
+    auto &approvedEvents = database["approvedEvents"];
+    auto &eventHistory = database["eventHistory"];
+
+    // search through the eventWaitlist for the event
+    for (auto &item : eventWaitlist)
+    {
+        if (item["id"] == id)
+        {
+            // if the admin has approved the event, send it to "approvedEvents"
+            if (isApproved)
+            {
+                json newEvent = json::parse(item.body);
+                approvedEvents.push_back(newEvent);
+                eventWaitlist.erase(item);
+                save();
+                return {
+                    {"success", true},
+                    {"message", "\nEvent has been approved\n"}
+                };
+            }
+            // otherwise, put the event in "eventHistory"
+            else
+            {
+                json newEvent =
+                    {
+                        {"Description" : item["Description"]},
+                        {"Status" : "denied"},
+                        {"Capacity" : 0},
+                        {"EventID" : item["EventId"]}
+                    };
+                eventHistory.push_back(newEvent);
+                eventWaitlist.erase(item);
+                save();
+                return {
+                    {"success", true},
+                    {"message", "\nEvent has been denied\n"}
+                };
+            }
+        }
+        return {
+            {"success", false},
+            {"message", "\nAn event matching this ID does not exist\n"}
+        };
+    }
+}
+
+// check if an event if at capacity when a student is added
+// if it is, return "true", which will cause the student to be waitlisted
+// if not, return "false", which will allow the student to be added as an attendee
+bool JsonRepository::isEventFull(int eventId, int capacity, int totalUsers)
+{
+    auto &approvedEvents = database["approvedEvents"];
+
+    for (auto &item : approvedEvents)
+    {
+        if (item["id"] == id)
+        {
+            // check if adding the new student will exceed the capacity of the event
+            if (totalUsers > capacity)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+    return false;
+}
+
 json JsonRepository::getEventWaitlist()
 {
     return database.value("eventWaitlist", json::array());
