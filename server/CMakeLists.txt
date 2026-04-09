@@ -12,7 +12,7 @@ include_directories(/home/student2025/json/single_include)
 find_package(cpr REQUIRED /usr/local/lib/cmake/cpr)
 
 #add executables
-add_executable(final-server main.cpp)
+add_executable(final-server src/main.cpp src/json-repository.cpp src/event.cpp)
 
 #link libraries
 target_link_libraries(final-server pthread jsoncpp cpr::cpr)

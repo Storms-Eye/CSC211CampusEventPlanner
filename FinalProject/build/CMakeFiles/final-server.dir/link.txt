@@ -1,1 +1,0 @@
-/usr/bin/c++ "CMakeFiles/final-server.dir/main.cpp.o" -o final-server  -lpthread -ljsoncpp /usr/local/lib/libcpr.a /usr/lib/x86_64-linux-gnu/libcurl.so /usr/lib/x86_64-linux-gnu/libssl.so /usr/lib/x86_64-linux-gnu/libcrypto.so 
