@@ -213,6 +213,11 @@ json JsonRepository::getEventHistory()
     return database.value("eventHistory", json::array());
 }
 
+json JsonRepository::getUserHistory()
+{
+    return users.value("events", json::array());
+}
+
 json JsonRepository::getAllTransactions()
 {
     return database.value("transactions", json::array());
