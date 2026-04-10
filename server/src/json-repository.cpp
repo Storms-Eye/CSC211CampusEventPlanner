@@ -173,23 +173,24 @@ json JsonRepository::approvalFunc(int id, bool isApproved)
 // if not, return "false", which will allow the student to be added as an attendee
 bool JsonRepository::isEventFull(int eventId, int capacity, int totalUsers)
 {
-    auto &approvedEvents = database["approvedEvents"];
+    auto &attendance = database["approvedEvents"]["Waitlist"];
+    int counter = 0;
 
-    for (auto &item : approvedEvents)
+    for (auto &item : attendance)
     {
-        if (item["id"] == id)
+        if (item["attendance"] == "Attending")
         {
-            // check if adding the new student will exceed the capacity of the event
-            if (totalUsers > capacity)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            // Counts how many students in the event are listed as attending
+            counter++;
         }
     }
+
+    // if the amount of students attending is equal to the capacity, bar more students from checking in
+    if (counter == capacity)
+    {
+        return true;
+    }
+    // Othwerwise, let them check in to the event
     return false;
 }
 
