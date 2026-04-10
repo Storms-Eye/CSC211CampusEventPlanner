@@ -61,7 +61,7 @@ int main()
     // REGISTRATION FUNCTION - also not my particular field, just showing how capacity limit will be enforced
     // URL may need to be adjusted
     CROW_ROUTE(app, "/register/<int>")
-        .methods("......"_method)([&repo](const crow::request &req, int id)
+        .methods("PATCH"_method)([&repo](const crow::request &req, int id)
     {
         // all of what the other team members will add...
 
@@ -69,15 +69,17 @@ int main()
 
         bool isEventFull(id, item["Capacity"].get<int>(), item["totalUsers"].get<int>());
 
-        // if the event is full, waitlist the student
-        // if not, add them as an attendee
+        // UPDATE FOR APRIL 10th WEEKLY CHECK-IN
+        // Changing what exact this method returns
+        // if the event is full, bar more students from checking into the event
+        // if it is not full, let them check into the event
         if (isEventFull)
         {
-            student["attendance"] = "Waitlisted";
+            return crow::response(400, "Event is full. You cannot check into this event");
         }
         else
         {
-            student["attendance"] = "Attending";
+            return crow::response(200, "Successfully checked into event.");
         }
     });
 
