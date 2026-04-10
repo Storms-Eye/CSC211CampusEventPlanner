@@ -51,6 +51,13 @@ int main()
         return crow::response(repo.getEventHistory().dump(4));
     });
 
+    // GET records of user history
+    CROW_ROUTE(app, "/userHistory")
+        .methods("GET"_method)([&repo]()
+    {
+        return crow::response(repo.getUserHistory().dump(4));
+    });
+
     // REGISTRATION FUNCTION - also not my particular field, just showing how capacity limit will be enforced
     // URL may need to be adjusted
     CROW_ROUTE(app, "/register/<int>")
