@@ -35,6 +35,7 @@ public:
     json getUserWaitlist();
     json getApprovedEvents();
     json getEventHistory();
+    json getUserHistory();
     json getAllTransactions();
     json getAttendance();
     json getValueById(json &dataset, std::string reference, int id);
