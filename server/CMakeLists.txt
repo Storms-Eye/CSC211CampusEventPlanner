@@ -4,18 +4,16 @@ project(finalProject)
 set (CMAKE_CXX_STANDARD 20)
 
 #include directories
-include_directories(include)
-include_directories(/usr/include/jsoncpp/json)
-include_directories(/home/student2025/Crow/include)
-include_directories(/home/student2025/json/single_include)
+include_directories(../crow/include)
 
-find_package(cpr REQUIRED /usr/local/lib/cmake/cpr)
+find_package(cpr REQUIRED)
+find_package(nlohmann_json REQUIRED)
 
 #add executables
 add_executable(final-server src/main.cpp src/json-repository.cpp src/event.cpp)
 
 #link libraries
-target_link_libraries(final-server pthread jsoncpp cpr::cpr)
+target_link_libraries(final-server pthread nlohmann_json::nlohmann_json cpr::cpr)
 
 #set target database
 add_custom_command(TARGET final-server POST_BUILD
