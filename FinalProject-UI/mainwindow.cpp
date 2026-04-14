@@ -95,6 +95,47 @@ void MainWindow::on_denyButton_clicked()
 
 void MainWindow::on_listButton_clicked()
 {
+    QUrl url("http://localhost:18080/isAdmin");
+    QUrl url1("http://localhost:18080/approvedEvents");
+    QUrl url2("http://localhost:18080/eventWaitList");
+    QNetworkRequest request(url);
+    QNetworkRequest request1(url1);
+    QNetworkRequest request2(url2);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request1.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request2.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QNetworkReply *reply = manager->sendCustomRequest(request, "GET", data); //maybe this is a json object, I lost my folder that contained this... I don't know how. This happens a lot. Hopefully it's fixed when I removed all the excess files from my root folder.
+
+    connect(reply, &QNetworkReply::finished, this, [=](){
+        if(reply->error() == QNetworkReply::NoError)
+        {
+
+            return;
+        }
+        else
+        {
+            QMessageBox::warning(this, "POST Failed", reply->errorString());
+        }
+        reply->deleteLater();
+    });
+    QNetworkReply *reply1 = manager->sendCustomRequest(request1, "GET", data); //again, maybe json
+    connect(reply1, &QNetworkReply::finished, this, [=](){
+        if(reply1->error() == QNetworkReply::NoError)
+        {
+            ui->textBrowser->text() = "HI";//json object goes here
+            return;
+        }
+        else
+        {
+            QMessageBox::warning(this, "POST Failed", reply->errorString());
+        }
+        reply->deleteLater();
+    });
+    QNetworkReply *reply2 = manager->sendCustomRequest(request2, "GET", data); //again, maybe json
+
+
+
 
 }
 

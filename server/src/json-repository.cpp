@@ -196,6 +196,7 @@ bool JsonRepository::isEventFull(int eventId, int capacity, int totalUsers)
 
 json JsonRepository::getEventWaitlist()
 {
+		//if(database.isStudent()) return NULL or something as the functino doesn't exist
     return database.value("eventWaitlist", json::array());
 }
 

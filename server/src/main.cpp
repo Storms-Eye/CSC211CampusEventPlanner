@@ -66,6 +66,8 @@ int main()
         // all of what the other team members will add...
 
         // ...
+				auto item = database				
+
 
         bool isEventFull(id, item["Capacity"].get<int>(), item["totalUsers"].get<int>());
 
@@ -79,6 +81,7 @@ int main()
         }
         else
         {
+						item["id"]["attended"] = "attended";
             return crow::response(200, "Successfully checked into event.");
         }
     });
