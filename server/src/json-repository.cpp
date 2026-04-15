@@ -133,7 +133,7 @@ json JsonRepository::approvalFunc(int id, bool isApproved)
             // if the admin has approved the event, send it to "approvedEvents"
             if (isApproved)
             {
-                json newEvent = json::parse(item.body);
+                json newEvent = item;
                 approvedEvents.push_back(newEvent);
                 eventWaitlist.erase(item);
                 save();
@@ -147,10 +147,10 @@ json JsonRepository::approvalFunc(int id, bool isApproved)
             {
                 json newEvent =
                     {
-                        {"Description" : item["Description"]},
-                        {"Status" : "denied"},
-                        {"Capacity" : 0},
-                        {"EventID" : item["EventId"]}
+                        {"Description", item["Description"]},
+                        {"Status", "denied"},
+                        {"Capacity", 0},
+                        {"EventID", item["EventId"]}
                     };
                 eventHistory.push_back(newEvent);
                 eventWaitlist.erase(item);
@@ -196,7 +196,7 @@ bool JsonRepository::isEventFull(int eventId, int capacity, int totalUsers)
 
 json JsonRepository::getEventWaitlist()
 {
-		//if(database.isStudent()) return NULL or something as the functino doesn't exist
+    // if(database.isStudent()) return NULL or something as the functino doesn't exist
     return database.value("eventWaitlist", json::array());
 }
 
