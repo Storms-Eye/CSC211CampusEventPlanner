@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include <QJsonDocument>
+#include <QJsonArray>
 #include <QMessageBox>
 #include <QNetworkRequest>
 #include <QNetworkReply>
@@ -91,51 +92,101 @@ void MainWindow::on_denyButton_clicked()
         reply->deleteLater();
     });
 }
+bool MainWindow::checkSort(QJsonObject obj)
+{
+    QString check = ui->identifierBox->toPlainText();
+    if(ui->nameButton->isEnabled())
+    {
 
-
+        if(obj["name"] == check)
+        {
+            return true;
+        }
+        else return false;
+    }
+    else if(ui->IDButton->isEnabled())
+    {
+        if(obj["EventId"] == check)
+        {
+            return true;
+        }
+        else return false;
+    }
+    return true;
+}
 void MainWindow::on_listButton_clicked()
 {
-    QUrl url("http://localhost:18080/isAdmin");
     QUrl url1("http://localhost:18080/approvedEvents");
     QUrl url2("http://localhost:18080/eventWaitList");
-    QNetworkRequest request(url);
     QNetworkRequest request1(url1);
     QNetworkRequest request2(url2);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request1.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request2.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
-    QNetworkReply *reply = manager->sendCustomRequest(request, "GET", data); //maybe this is a json object, I lost my folder that contained this... I don't know how. This happens a lot. Hopefully it's fixed when I removed all the excess files from my root folder.
 
-    connect(reply, &QNetworkReply::finished, this, [=](){
-        if(reply->error() == QNetworkReply::NoError)
-        {
+    QString returnText = "";
 
-            return;
-        }
-        else
-        {
-            QMessageBox::warning(this, "POST Failed", reply->errorString());
-        }
-        reply->deleteLater();
-    });
-    QNetworkReply *reply1 = manager->sendCustomRequest(request1, "GET", data); //again, maybe json
-    connect(reply1, &QNetworkReply::finished, this, [=](){
+    QNetworkReply *reply1 = manager->sendCustomRequest(request1, "GET"); //again, maybe json
+    connect(reply1, &QNetworkReply::finished, this, [=]() mutable{
         if(reply1->error() == QNetworkReply::NoError)
         {
-            ui->textBrowser->text() = "HI";//json object goes here
-            return;
+            QByteArray responseData = reply1->readAll();
+            QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
+            if (jsonDoc.isArray()) {
+                QJsonArray jsonArray = jsonDoc.array();
+                for (const QJsonValue &value : jsonArray) {
+                    if (value.isObject()) {
+                        QJsonObject obj = value.toObject();
+                        if(checkSort(obj))
+                        {
+                            returnText += obj["Name"].toString() + ", Capacity:  " + obj["Capacity"].toString() + ") ";
+                            //if(role == "student") returnText += "[Approved] "
+                            returnText += obj["Description"].toString() + "\n";
+                            ui->outputBox->setPlainText(returnText);
+                        }
+                    }
+                }
+            }
         }
         else
         {
-            QMessageBox::warning(this, "POST Failed", reply->errorString());
+            QMessageBox::warning(this, "POST Failed", reply1->errorString());
         }
-        reply->deleteLater();
+        reply1->deleteLater();
     });
-    QNetworkReply *reply2 = manager->sendCustomRequest(request2, "GET", data); //again, maybe json
 
+ //   if(role.equals("student"))
+  //  {
+        QNetworkReply *reply2 = manager->sendCustomRequest(request2, "GET"); //again, maybe json
+        connect(reply2, &QNetworkReply::finished, this, [=]() mutable{
+            if(reply2->error() == QNetworkReply::NoError){
+                QByteArray responseData2 = reply2->readAll();
+                QJsonDocument jsonDoc2 = QJsonDocument::fromJson(responseData2);
+                if (jsonDoc2.isArray()) {
+                    QJsonArray jsonArray2 = jsonDoc2.array();
+                    for (const QJsonValue &value : jsonArray2) {
+                        if (value.isObject()) {
+                            QJsonObject obj = value.toObject();
+                            if(checkSort(obj))
+                            {
+                                returnText += obj["Name"].toString() + ", Capacity:  " + obj["Capacity"].toString() + ") [In Queue] " +  obj["Description"].toString() + "\n";
 
+                            }
+                        }
+                    }
+                }
 
+            }
+            else
+            {
+                QMessageBox::warning(this, "POST Failed", reply2->errorString());
+            }
+            reply2->deleteLater();
+        });
+
+  //  }
+
+        return;
 
 }
 

@@ -8,7 +8,8 @@
 	},
 	"eventWaitlist": [
 		{
-			"Description": "Name of event and why it needs to happen",
+			"Name": "name",
+			"Description": "Why it needs to happen",
 			"Waitlist": [],
 			"Capacity": 40,
 			"EventId": 1
@@ -19,7 +20,8 @@
 	],
 	"approvedEvents": [
 		{
-			"Description": "Name of event and why it needs to happen",
+			"Name": "Game Jam",
+			"Description": "Coders to show off current projects",
 			"Waitlist": [
 				{
 					"userId": "1234567",
