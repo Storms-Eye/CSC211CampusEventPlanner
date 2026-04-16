@@ -92,7 +92,7 @@ void MainWindow::on_denyButton_clicked()
         reply->deleteLater();
     });
 }
-bool MainWindow::checkSort(QJsonObject obj)
+bool MainWindow::checkSort(const QJsonObject& obj)
 {
     QString check = ui->identifierBox->toPlainText();
     if(ui->nameButton->isEnabled())
