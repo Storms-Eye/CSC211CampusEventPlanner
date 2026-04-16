@@ -21,7 +21,7 @@ public:
 private slots:
     void on_approveButton_clicked();
     void on_denyButton_clicked();
-
+    bool checkSort(const QJsonObject& obj);
     void on_listButton_clicked();
 
 private:

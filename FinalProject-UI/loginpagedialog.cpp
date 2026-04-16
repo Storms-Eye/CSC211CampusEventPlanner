@@ -2,6 +2,7 @@
 #include "ui_loginpagedialog.h"
 
 #include <QMessageBox>
+#include <QJsonDocument>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QUrl>

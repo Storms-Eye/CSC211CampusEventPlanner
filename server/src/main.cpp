@@ -57,11 +57,6 @@ int main()
         return crow::response(repo.getAttendance().dump(4));
     });
 
-    // GET records of event history
-    CROW_ROUTE(app, "/eventHistory").methods("GET"_method)([&repo]()
-    {
-        return crow::response(repo.getEventHistory().dump(4));
-    });
 
     // GET records of user history
     CROW_ROUTE(app, "/userHistory").methods("GET"_method)([&repo]()
@@ -104,4 +99,5 @@ int main()
     });
     
     app.port(18080).multithreaded().run();
+
 }
