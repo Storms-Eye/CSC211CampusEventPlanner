@@ -22,76 +22,30 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_approveButton_clicked()
+void MainWindow::acceptCredentials(const QString &acceptedID, const QString &acceptedPin, const QString &acceptedRole, const QString &acceptedName)
 {
-    bool isApproved = true;
-    QString eventIdText = ui->eventIdInput->text().trimmed();
-
-    if(eventIdText.isEmpty())
+    userID = acceptedID;
+    pin = acceptedPin;
+    role = acceptedRole;
+    name = acceptedName;
+    
+    ui->roleLabel->setText(role);
+    ui->nameLabel->setText(name);
+    
+    if (role == "student")
     {
-        QMessageBox::warning(this, "No ID Given", "Please enter an event ID");
-        return;
+        ui->functionButton->setText("Register for Event");
     }
-    QUrl url("http://localhost:18080/events/" + eventIdText);
-    QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-
-    QJsonObject obj;
-    obj["isApproved"] = isApproved;
-    QJsonDocument doc(obj);
-    QByteArray data = doc.toJson();
-
-    QNetworkReply *reply = manager->sendCustomRequest(request, "POST", data);
-
-    connect(reply, &QNetworkReply::finished, this, [=](){
-        if(reply->error() == QNetworkReply::NoError)
-        {
-            QMessageBox::information(this, "Event Approved", "Event has been added to list of approved events", QMessageBox::Ok);
-            return;
-        }
-        else
-        {
-            QMessageBox::warning(this, "POST Failed", reply->errorString());
-        }
-        reply->deleteLater();
-    });
+    else if (role == "moderator")
+    {
+        ui->functionButton->setText("Create Event");
+    }
+    else if (role == "admin")
+    {
+        ui->functionButton->setText("Approve/Deny Event");
+    }
 }
 
-
-void MainWindow::on_denyButton_clicked()
-{
-    bool isApproved = false;
-    QString eventIdText = ui->eventIdInput->text().trimmed();
-
-    if(eventIdText.isEmpty())
-    {
-        QMessageBox::warning(this, "No ID Given", "Please enter an event ID");
-        return;
-    }
-    QUrl url("http://localhost:18080/register/" + eventIdText);
-    QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-
-    QJsonObject obj;
-    obj["isApproved"] = isApproved;
-    QJsonDocument doc(obj);
-    QByteArray data = doc.toJson();
-
-    QNetworkReply *reply = manager->sendCustomRequest(request, "POST", data);
-
-    connect(reply, &QNetworkReply::finished, this, [=](){
-        if(reply->error() == QNetworkReply::NoError)
-        {
-            QMessageBox::information(this, "Event Denied", "Event has been added to event history", QMessageBox::Ok);
-            return;
-        }
-        else
-        {
-            QMessageBox::warning(this, "POST Failed", reply->errorString());
-        }
-        reply->deleteLater();
-    });
-}
 bool MainWindow::checkSort(const QJsonObject& obj)
 {
     QString check = ui->identifierBox->toPlainText();
@@ -185,8 +139,31 @@ void MainWindow::on_listButton_clicked()
         });
 
   //  }
-
         return;
-
 }
 
+void MainWindow::on_functionButton_clicked()
+{
+    // these dialogs/classes have not been created yet
+    if (role == "student")
+    {
+        RegisterDialog r;
+        r.show();
+    }
+    else if (role == "moderator")
+    {
+        CreateEventDialog c;
+        c.show();
+    }
+    else if (role == "admin")
+    {
+        EventApprovalDialog e;
+        e.show();
+    }
+}
+
+void MainWindow::on_usersButton_clicked()
+{
+    //if admin, display all users
+    //if student, display current user
+}
