@@ -17,6 +17,14 @@ namespace EventManager
                 return res;
             }
 
+            if (!repo.isAdmin(user))
+            {
+                crow::response res(403);
+                res.set_header("Content-Type", "application/json");
+                res.write(json({{"error", "Forbidden: Admin access required"}}).dump());
+                return res;
+            }
+
             repo.eventHistoryUpdate(eventID);
             return crow::response(200, "Event history updated");
         });
@@ -39,7 +47,6 @@ namespace EventManager
             return crow::response(repo.getEventWaitlist().dump(4));
         });
 
-        // EVENT APPROVAL/DENIAL FUNCTION (first draft)
         CROW_ROUTE(app, "/events/<int>").methods("POST"_method)([&repo](const crow::request &req, int id)
         {
             json user = loginHelper(req, repo);
@@ -51,15 +58,19 @@ namespace EventManager
                 return res;
             }
 
+            if (!repo.isAdmin(user))
+            {
+                crow::response res(403);
+                res.set_header("Content-Type", "application/json");
+                res.write(json({{"error", "Forbidden: Admin access required"}}).dump());
+                return res;
+            }
+
             if (id == 0)
             {
                 return crow::response(400, "Events start at ID 1");
             }
 
-            // checks here for making sure the body contains all it is supposed to
-            // should contain user ID, pin, and approval status (either true or false)
-
-            // check if the user is an admin, the only person who should be able to approve or deny events
             json body;
             body = json::parse(req.body);
 
@@ -83,33 +94,66 @@ namespace EventManager
             res.write(result["message"].get<std::string>());
             return res;
         });
-    }
 
-    json createEvent(JsonRepository &repo, int userId, int capacity, std::string description, std::string date)
-    {
-        /* JsonRepository needs more functions before this will compile.
-        // TODO: Add jsonrepo to createevent parameters, as we no longer have a global variable for jsonrepo.
-        json &user = repo.getUserById(userId);
-        if (user.isModerator())
+        CROW_ROUTE(app, "/createEvent").methods("POST"_method)([&repo](const crow::request &req)
         {
-            int eventId = database["nextPendingEventId"];
-            json event =
-                {
-                    {"Description", description},
-                    {"Waitlist", json::array()},
-                    {"Capacity", capacity},
-                    {"EventId", eventId}
-                };
-            json userEvent =
-                {
-                    {"eventId", eventId},
-                    {"status", "Pending"}
-                };
-            user["events"].push_back(userEvent);
+            json user = loginHelper(req, repo);
+            if (user.is_null())
+            {
+                crow::response res(403);
+                res.set_header("Content-Type", "application/json");
+                res.write(json({{"error", "Unauthorized login attempt"}}).dump());
+                return res;
+            }
 
-            database["eventWaitList"].push_back(event);
-        }
-        */
-        return json();
+            if (!repo.isModerator(user))
+            {
+                return crow::response(403, "Forbidden: Only moderators can create events.");
+            }
+
+            json body;
+            body = json::parse(req.body);
+
+            int userId = body["user_id"];
+            int capacity = body["capacity"];
+            std::string description = body["description"];
+            std::string date = body["date"];
+
+            // Joseph
+            bool success = repo.createNewEvent(userId, capacity, description, date);
+
+            /* Move this to jsonrepo.
+            // TODO: Add jsonrepo to createevent parameters, as we no longer have a global variable for jsonrepo.
+            json &user = repo.getUserById(userId);
+            if (user.isModerator())
+            {
+                int eventId = database["nextPendingEventId"];
+                json event =
+                    {
+                        {"Description", description},
+                        {"Waitlist", json::array()},
+                        {"Capacity", capacity},
+                        {"EventId", eventId}
+                    };
+                json userEvent =
+                    {
+                        {"eventId", eventId},
+                        {"status", "Pending"}
+                    };
+                user["events"].push_back(userEvent);
+
+                database["eventWaitList"].push_back(event);
+            }
+            */
+
+            if (success)
+            {
+                return crow::response(200, "Event created and sent to waitlist");
+            }
+            else
+            {
+                return crow::response(500, "Failed to link event to user account");
+            }
+        });
     }
 }

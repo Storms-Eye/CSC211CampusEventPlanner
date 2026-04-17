@@ -27,7 +27,7 @@ public:
     json approvalFunc(int id, bool isApproved);
 
     bool validID(const std::string &userID);
-    bool canPostEvents(const json &user);
+    bool isModerator(const json &user);
     bool isAdmin(const json &user);
     bool isEventFull(int eventId, int capacity, int totalUsers);
 

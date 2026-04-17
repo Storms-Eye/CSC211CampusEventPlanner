@@ -40,8 +40,25 @@ int main()
 
     // TODO: Move these routes into their own managers (user manager, event manager, etc).
     // GET waitlist of users waiting for their registration to be accepted
-    CROW_ROUTE(app, "/userWaitlist").methods("GET"_method)([&repo]()
+    CROW_ROUTE(app, "/userWaitlist").methods("GET"_method)([&repo](const crow::request &req)
     {
+        json user = loginHelper(req, repo);
+        if (user.is_null())
+        {
+            crow::response res(403);
+            res.set_header("Content-Type", "application/json");
+            res.write(json({{"error", "Unauthorized login attempt"}}).dump());
+            return res;
+        }
+
+        if (!repo.isAdmin(user) && !repo.isModerator(user))
+        {
+            crow::response res(403);
+            res.set_header("Content-Type", "application/json");
+            res.write(json({{"error", "Forbidden: Admin or moderator access required"}}).dump());
+            return res;
+        }
+        
         return crow::response(repo.getUserWaitlist().dump(4));
     });
 
@@ -51,12 +68,50 @@ int main()
         return crow::response(repo.getAllTransactions().dump(4));
     });
 
-    // GET records of event attendance
-    CROW_ROUTE(app, "/attendance").methods("GET"_method)([&repo]()
+    // GET records of event attendance. Only moderator and admins can see this.
+    CROW_ROUTE(app, "/attendance").methods("GET"_method)([&repo](const crow::request &req)
     {
+        json user = loginHelper(req, repo);
+        if (user.is_null())
+        {
+            crow::response res(403);
+            res.set_header("Content-Type", "application/json");
+            res.write(json({{"error", "Unauthorized login attempt"}}).dump());
+            return res;
+        }
+
+        if (!repo.isAdmin(user) && !repo.isModerator(user))
+        {
+            crow::response res(403);
+            res.set_header("Content-Type", "application/json");
+            res.write(json({{"error", "Forbidden: Admin or moderator access required"}}).dump());
+            return res;
+        }
+
         return crow::response(repo.getAttendance().dump(4));
     });
 
+    // GET records of event history. Only admin can see this.
+    CROW_ROUTE(app, "/eventHistory").methods("GET"_method)([&repo](const crow::request &req)
+    {
+        json user = loginHelper(req, repo);
+        if (user.is_null())
+        {
+            crow::response res(403);
+            res.set_header("Content-Type", "application/json");
+            res.write(json({{"error", "Unauthorized login attempt"}}).dump());
+            return res;
+        }
+        if (!repo.isAdmin(user))
+        {
+            crow::response res(403);
+            res.set_header("Content-Type", "application/json");
+            res.write(json({{"error", "Forbidden: Admin or moderator access required"}}).dump());
+            return res;
+        }
+
+        return crow::response(repo.getEventHistory().dump(4));
+    });
 
     // GET records of user history
     CROW_ROUTE(app, "/userHistory").methods("GET"_method)([&repo]()
@@ -97,7 +152,7 @@ int main()
             return crow::response(200, "Successfully checked into event.");
         }
     });
-    
+
     app.port(18080).multithreaded().run();
 
 }
