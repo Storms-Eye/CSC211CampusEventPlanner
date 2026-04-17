@@ -15,6 +15,8 @@ class LoginPageDialog : public QDialog
 public:
     explicit LoginPageDialog(QWidget *parent = nullptr);
     ~LoginPageDialog();
+    QString getUserID();
+    QString getPin();
 
 private slots:
     void on_loginButton_clicked();
@@ -22,6 +24,8 @@ private slots:
 private:
     Ui::LoginPageDialog *ui;
     QNetworkAccessManager *manager;
+signals:
+    void loginResponse(const QString &response);
 };
 
 #endif // LOGINPAGEDIALOG_H
