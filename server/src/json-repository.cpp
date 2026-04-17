@@ -95,7 +95,7 @@ json JsonRepository::authenticateUser(const std::string &userID, const std::stri
 }
 
 // checking if the user is a moderator in order to be able to POST events
-bool JsonRepository::canPostEvents(const json &user)
+bool JsonRepository::isModerator(const json &user)
 {
     if (user.is_null())
     {
