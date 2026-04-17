@@ -17,15 +17,20 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void acceptCredentials(const QString &acceptedID, const QString &acceptedPin, const QString &acceptedRole, const QString &acceptedName);
 
 private slots:
-    void on_approveButton_clicked();
-    void on_denyButton_clicked();
     bool checkSort(const QJsonObject& obj);
     void on_listButton_clicked();
+    void on_functionButton_clicked();
+    void on_usersButton_clicked();
 
 private:
     Ui::MainWindow *ui;
     QNetworkAccessManager *manager;
+    QString userID;
+    QString pin;
+    QString name;
+    QString role;
 };
 #endif // MAINWINDOW_H
