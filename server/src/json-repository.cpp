@@ -75,6 +75,28 @@ bool JsonRepository::validID(const std::string &userID)
     return true;
 }
 
+bool JsonRepository::createNewEvent(json &user, int capacity, std::string description, std::string date)
+{
+    int eventId = database["nextPendingEventId"];
+    json event =
+        {
+            {"Description", description},
+            {"Waitlist", json::array()},
+            {"Capacity", capacity},
+            {"EventId", eventId}
+        };
+    json userEvent =
+        {
+            {"eventId", eventId},
+            {"status", "Pending"}
+        };
+    user["events"].push_back(userEvent);
+
+    database["eventWaitList"].push_back(event);
+
+    return true;
+}
+
 // Uses both user's ID and pin to authenticate them
 json JsonRepository::authenticateUser(const std::string &userID, const std::string &pin)
 {
