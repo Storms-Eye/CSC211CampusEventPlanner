@@ -120,32 +120,7 @@ namespace EventManager
             std::string date = body["date"];
 
             // Joseph
-            bool success = repo.createNewEvent(userId, capacity, description, date);
-
-            /* Move this to jsonrepo.
-            // TODO: Add jsonrepo to createevent parameters, as we no longer have a global variable for jsonrepo.
-            json &user = repo.getUserById(userId);
-            if (user.isModerator())
-            {
-                int eventId = database["nextPendingEventId"];
-                json event =
-                    {
-                        {"Description", description},
-                        {"Waitlist", json::array()},
-                        {"Capacity", capacity},
-                        {"EventId", eventId}
-                    };
-                json userEvent =
-                    {
-                        {"eventId", eventId},
-                        {"status", "Pending"}
-                    };
-                user["events"].push_back(userEvent);
-
-                database["eventWaitList"].push_back(event);
-            }
-            */
-
+            bool success = repo.createNewEvent(user, capacity, description, date);
             if (success)
             {
                 return crow::response(200, "Event created and sent to waitlist");
