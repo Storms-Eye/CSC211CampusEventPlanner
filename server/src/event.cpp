@@ -118,8 +118,6 @@ namespace EventManager
             int capacity = body["capacity"];
             std::string description = body["description"];
             std::string date = body["date"];
-
-            // Joseph
             bool success = repo.createNewEvent(userId, capacity, description, date);
 
             /* Move this to jsonrepo.
@@ -145,7 +143,6 @@ namespace EventManager
                 database["eventWaitList"].push_back(event);
             }
             */
-
             if (success)
             {
                 return crow::response(200, "Event created and sent to waitlist");

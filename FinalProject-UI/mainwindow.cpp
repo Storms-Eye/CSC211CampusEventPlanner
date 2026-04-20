@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "loginpagedialog.h"
+#include "registerdialog.h"
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QMessageBox>
@@ -48,7 +50,7 @@ void MainWindow::acceptCredentials(const QString &acceptedID, const QString &acc
 
 bool MainWindow::checkSort(const QJsonObject& obj)
 {
-    QString check = ui->identifierBox->toPlainText();
+    QString check = ui->outputBox->toPlainText();
     if(ui->nameButton->isEnabled())
     {
 
@@ -109,8 +111,8 @@ void MainWindow::on_listButton_clicked()
         reply1->deleteLater();
     });
 
- //   if(role.equals("student"))
-  //  {
+    if(!(role == "student"))
+    {
         QNetworkReply *reply2 = manager->sendCustomRequest(request2, "GET"); //again, maybe json
         connect(reply2, &QNetworkReply::finished, this, [=]() mutable{
             if(reply2->error() == QNetworkReply::NoError){
@@ -138,7 +140,7 @@ void MainWindow::on_listButton_clicked()
             reply2->deleteLater();
         });
 
-  //  }
+    }
         return;
 }
 
@@ -147,17 +149,17 @@ void MainWindow::on_functionButton_clicked()
     // these dialogs/classes have not been created yet
     if (role == "student")
     {
-        RegisterDialog r;
+        registerDialog r;
         r.show();
     }
     else if (role == "moderator")
     {
-        CreateEventDialog c;
+        createEventDialog c;
         c.show();
     }
     else if (role == "admin")
     {
-        EventApprovalDialog e;
+        eventApprovalDialog e;
         e.show();
     }
 }
