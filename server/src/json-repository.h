@@ -32,8 +32,10 @@ public:
     bool isModerator(const json &user);
     bool isAdmin(const json &user);
     bool isEventFull(int eventId, int capacity, int totalUsers);
-
-    json getEventWaitlist();
+		
+		bool createNewEvent(userId, capacity, description, date);
+    
+		json getEventWaitlist();
     json getUserWaitlist();
     json getApprovedEvents();
     json getEventHistory();
