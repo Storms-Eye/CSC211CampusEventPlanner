@@ -52,44 +52,50 @@ void MainWindow::acceptCredentials(const QString &acceptedID, const QString &acc
 
 bool MainWindow::checkSort(const QJsonObject& obj)
 {
-    QString check = ui->inputBox->toPlainText();
-    if(ui->nameButton->isEnabled())
+    QString check = ui->inputBox->toPlainText().trimmed();
+    if(ui->allButton->isChecked() || check.isEmpty())
     {
-
-        if(obj["Name"] == check)
-        {
-            return true;
-        }
-        else return false;
+        return true;
     }
-    else if(ui->IDButton->isEnabled())
+
+    if(ui->nameButton->isChecked())
     {
-        if(obj["EventId"] == check)
+        if(obj["Name"].toString() == check)
         {
             return true;
         }
-        else return false;
+        return false;
+    }
+    else if(ui->IDButton->isChecked())
+    {
+        if(QString::number(obj["EventId"].toInt()) == check)
+        {
+            return true;
+        }
+        return false;
     }
     return true;
 }
+
 void MainWindow::on_listButton_clicked()
 {
+    ui->outputBox->clear();
+
     QUrl url1("http://localhost:18080/approvedEvents");
-    QUrl url2("http://localhost:18080/eventWaitlist");
     QNetworkRequest request1(url1);
-    QNetworkRequest request2(url2);
     request1.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    request2.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request1.setRawHeader("X-User-ID", userID.toUtf8());
+    request1.setRawHeader("X-User-Pin", pin.toUtf8());
 
-
-    QString returnText = "";
-
-    QNetworkReply *reply1 = manager->sendCustomRequest(request1, "GET"); //again, maybe json
-    connect(reply1, &QNetworkReply::finished, this, [=]() mutable{
+    QNetworkReply *reply1 = manager->get(request1);
+    connect(reply1, &QNetworkReply::finished, this, [=]() {
         if(reply1->error() == QNetworkReply::NoError)
         {
             QByteArray responseData = reply1->readAll();
             QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
+
+            QString approvedText = "";
+
             if (jsonDoc.isArray()) {
                 QJsonArray jsonArray = jsonDoc.array();
                 for (const QJsonValue &value : jsonArray) {
@@ -97,26 +103,35 @@ void MainWindow::on_listButton_clicked()
                         QJsonObject obj = value.toObject();
                         if(checkSort(obj))
                         {
-                            returnText += obj["Name"].toString() + ", Capacity:  " + QString::number(obj["Capacity"].toInt()) + ") ";
-                            //if(role == "student") returnText += "[Approved] "
-                            returnText += obj["Description"].toString() + "\n";
-                            ui->outputBox->setPlainText(returnText);
+                            approvedText += obj["Name"].toString() + ", Capacity:  " + QString::number(obj["Capacity"].toInt()) + ") ";
+                            approvedText += obj["Description"].toString() + "\n";
                         }
                     }
                 }
             }
+            ui->outputBox->setPlainText(approvedText);
         }
         else
         {
-            QMessageBox::warning(this, "POST Failed", reply1->errorString());
+            QMessageBox::warning(this, "GET Approved Failed", reply1->errorString());
         }
-        if(!(role == "student"))
+
+        if(role != "student")
         {
-            QNetworkReply *reply2 = manager->sendCustomRequest(request2, "GET"); //again, maybe json
-            connect(reply2, &QNetworkReply::finished, this, [=]() mutable{
-                if(reply2->error() == QNetworkReply::NoError){
+            QUrl url2("http://localhost:18080/eventWaitlist");
+            QNetworkRequest request2(url2);
+            request2.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+            request2.setRawHeader("X-User-ID", userID.toUtf8());
+            request2.setRawHeader("X-User-Pin", pin.toUtf8());
+
+            QNetworkReply *reply2 = manager->get(request2);
+            connect(reply2, &QNetworkReply::finished, this, [=]() {
+                if(reply2->error() == QNetworkReply::NoError)
+                {
+                    QString waitlistText = "";
                     QByteArray responseData2 = reply2->readAll();
                     QJsonDocument jsonDoc2 = QJsonDocument::fromJson(responseData2);
+
                     if (jsonDoc2.isArray()) {
                         QJsonArray jsonArray2 = jsonDoc2.array();
                         for (const QJsonValue &value : jsonArray2) {
@@ -124,27 +139,22 @@ void MainWindow::on_listButton_clicked()
                                 QJsonObject obj = value.toObject();
                                 if(checkSort(obj))
                                 {
-                                    returnText += obj["Name"].toString() + ", Capacity:  " + QString::number(obj["Capacity"].toInt()) + ") [In Queue] " +  obj["Description"].toString() + "\n";
-
+                                    waitlistText += obj["Name"].toString() + ", Capacity:  " + QString::number(obj["Capacity"].toInt()) + ") [In Queue] " +  obj["Description"].toString() + "\n";
                                 }
                             }
                         }
                     }
-
+                    ui->outputBox->append(waitlistText);
                 }
                 else
                 {
-                    QMessageBox::warning(this, "POST Failed", reply2->errorString());
+                    QMessageBox::warning(this, "GET Waitlist Failed", reply2->errorString());
                 }
                 reply2->deleteLater();
             });
-
         }
         reply1->deleteLater();
     });
-
-
-        return;
 }
 
 void MainWindow::on_functionButton_clicked()
@@ -153,17 +163,17 @@ void MainWindow::on_functionButton_clicked()
     if (role == "student")
     {
         registerDialog r;
-        r.show();
+        r.exec();
     }
     else if (role == "moderator")
     {
         CreateEventDialog c;
-        c.show();
+        c.exec();
     }
     else if (role == "admin")
     {
         EventApprovalDialog e;
-        e.show();
+        e.exec();
     }
 }
 
