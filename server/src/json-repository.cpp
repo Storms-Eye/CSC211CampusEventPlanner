@@ -1,5 +1,5 @@
 #include "json-repository.h"
-
+#include <mutex>
 JsonRepository::JsonRepository(const std::string &file, const std::string &userFile)
     : filename(file), userfilename(userFile)
 {
@@ -77,7 +77,7 @@ bool JsonRepository::validID(const std::string &userID)
 
 bool JsonRepository::createNewEvent(json &user, std::string name, int capacity, std::string description, std::string date)
 {
-    int eventId = database["nextPendingEventId"];
+    int eventId = database["meta"]["nextPendingEventId"];
     json event =
         {
 						{"Name", name},
@@ -93,7 +93,7 @@ bool JsonRepository::createNewEvent(json &user, std::string name, int capacity, 
         };
     user["events"].push_back(userEvent);
 
-    database["eventWaitList"].push_back(event);
+    database["eventWaitlist"].push_back(event);
 		
     return true;
 }
@@ -217,12 +217,14 @@ bool JsonRepository::isEventFull(int eventId, int capacity, int totalUsers)
     return false;
 }
 
+/*json JsonRepository::getEventWaitlist()
+{
+    return database.value("eventWaitlist", json::array());
+}*/
 json JsonRepository::getEventWaitlist()
 {
-    // if(database.isStudent()) return NULL or something as the functino doesn't exist
     return database.value("eventWaitlist", json::array());
 }
-
 json JsonRepository::getUserWaitlist()
 {
     return database.value("userWaitlist", json::array());
@@ -230,7 +232,8 @@ json JsonRepository::getUserWaitlist()
 
 json JsonRepository::getApprovedEvents()
 {
-    return database.value("approvedEvents", json::array());
+  std::lock_guard<std::mutex> lock(mtx);  
+	return database.value("approvedEvents", json::array());
 }
 
 json JsonRepository::getEventHistory()
@@ -325,6 +328,7 @@ void JsonRepository::userHistoryUpdate(int userID, int eventID)
         if (data["EventId"] == eventID)
         {
             event = data;
+;
         }
     }
 

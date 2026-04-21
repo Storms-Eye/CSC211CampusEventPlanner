@@ -3,6 +3,7 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 #include <string>
+#include <mutex>
 
 using json = nlohmann::json;
 
@@ -16,7 +17,7 @@ private:
 
 public:
     JsonRepository(const std::string &file, const std::string &userFile);
-
+		mutable std::mutex mtx;
     void load();
     void save();
     void saveUsers();

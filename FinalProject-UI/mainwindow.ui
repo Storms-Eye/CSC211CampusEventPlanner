@@ -63,7 +63,7 @@
    <widget class="QLabel" name="roleLabel">
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>240</x>
       <y>20</y>
       <width>121</width>
       <height>31</height>
@@ -78,15 +78,18 @@
      <string>Role:</string>
     </property>
     <property name="alignment">
-     <set>Qt::AlignCenter</set>
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="nameLabel">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>370</x>
       <y>20</y>
-      <width>141</width>
+      <width>401</width>
       <height>31</height>
      </rect>
     </property>
@@ -99,7 +102,7 @@
      <string>Name</string>
     </property>
     <property name="alignment">
-     <set>Qt::AlignCenter</set>
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
     </property>
    </widget>
    <widget class="QPushButton" name="usersButton">
@@ -149,6 +152,9 @@
     </property>
     <property name="text">
      <string>All</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QRadioButton" name="nameButton">
