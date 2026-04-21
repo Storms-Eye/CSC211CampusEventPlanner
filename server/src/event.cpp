@@ -106,13 +106,13 @@ namespace EventManager
 
             json body;
             body = json::parse(req.body);
-
+						std::string name = body["name"];
             int userId = body["user_id"];
             int capacity = body["capacity"];
             std::string description = body["description"];
             std::string date = body["date"];
 
-            bool success = repo.createNewEvent(user, capacity, description, date);
+            bool success = repo.createNewEvent(user, name, capacity, description, date);
             if (success)
             {
                 return crow::response(200, "Event created and sent to waitlist");

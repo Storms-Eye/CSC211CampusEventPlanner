@@ -23,7 +23,7 @@ public:
     void eventHistoryUpdate(int eventID);
     void userHistoryUpdate(int userID, int eventID);
 
-    bool createNewEvent(json &user, int capacity, std::string description, std::string date);
+    bool createNewEvent(json &user,std::string name, int capacity, std::string description, std::string date);
 
     json authenticateUser(const std::string &userID, const std::string &pin);
     json approvalFunc(int id, bool isApproved);

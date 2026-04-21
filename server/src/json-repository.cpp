@@ -75,11 +75,12 @@ bool JsonRepository::validID(const std::string &userID)
     return true;
 }
 
-bool JsonRepository::createNewEvent(json &user, int capacity, std::string description, std::string date)
+bool JsonRepository::createNewEvent(json &user, std::string name, int capacity, std::string description, std::string date)
 {
     int eventId = database["nextPendingEventId"];
     json event =
         {
+						{"Name", name},
             {"Description", description},
             {"Waitlist", json::array()},
             {"Capacity", capacity},
@@ -93,7 +94,7 @@ bool JsonRepository::createNewEvent(json &user, int capacity, std::string descri
     user["events"].push_back(userEvent);
 
     database["eventWaitList"].push_back(event);
-
+		
     return true;
 }
 
