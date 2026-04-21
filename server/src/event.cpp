@@ -34,13 +34,6 @@ namespace EventManager
         {
             return crow::response(repo.getApprovedEvents().dump(4));
         });
-
-        // GET list of all past events
-        CROW_ROUTE(app, "/eventHistory").methods("GET"_method)([&repo]()
-        {
-            return crow::response(repo.getEventHistory().dump(4));
-        });
-
         // GET waitlist of events waiting to be approved or denied
         CROW_ROUTE(app, "/eventWaitlist").methods("GET"_method)([&repo]()
         {
