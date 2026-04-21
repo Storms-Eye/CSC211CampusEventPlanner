@@ -37,39 +37,77 @@ void LoginPageDialog::on_loginButton_clicked()
         QMessageBox::warning(this, "No PIN Given", "Please enter your user PIN");
         return;
     }
+
+
     QUrl url("http://localhost:18080/login");
     QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setRawHeader("X-User-ID", userId.toUtf8());
+    request.setRawHeader("X-User-Pin", userPin.toUtf8());
 
-    QJsonObject obj;
-    obj["userId"] = userId;
-    obj["pin"] = userPin;
-    QJsonDocument doc(obj);
-    QByteArray data = doc.toJson();
-
-    QNetworkReply *reply = manager->sendCustomRequest(request, "POST", data);
+    QByteArray info;
+    QNetworkReply *reply = manager->post(request, info);
 
     connect(reply, &QNetworkReply::finished, this, [=](){
         if(reply->error() == QNetworkReply::NoError)
         {
-            QMessageBox::information(this, "Login Approved", "Login successful", QMessageBox::Ok);
-            return;
+            QByteArray responseData = reply->readAll();
+            QJsonParseError parseError;
+            QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData, &parseError);
+
+            if (parseError.error != QJsonParseError::NoError) {
+                QMessageBox::warning(this, "Parse Error", "Received invalid data from server.");
+                reply->deleteLater();
+                return;
+            }
+
+            if (jsonDoc.isObject()) {
+                QJsonObject jsonObj = jsonDoc.object();
+                bool success = jsonObj["success"].toBool();
+
+                if (success) {
+                    int returnedId = jsonObj["user_id"].toInt();
+                    QString name = jsonObj["name"].toString();
+                    QString role = jsonObj["role"].toString();
+
+                    user_id = userId;
+                    user_name = name;
+                    user_role = role;
+                    user_pin = userPin;
+
+                    QString welcomeMessage = QString("Welcome, %1! Your role is: %2").arg(name, role);
+                    QMessageBox::information(this, "Login Approved", welcomeMessage, QMessageBox::Ok);
+
+                    this->accept();
+                } else {
+                    QMessageBox::warning(this, "Login Failed", "Invalid credentials.");
+                }
+            }
         }
         else
         {
-            QMessageBox::warning(this, "GET Failed", reply->errorString());
+            QMessageBox::warning(this, "POST Failed", reply->errorString());
         }
+
         reply->deleteLater();
     });
 }
 
 QString LoginPageDialog::getUserID()
 {
-    return "HI";
+    return user_id;
 }
 
 QString LoginPageDialog::getPin()
 {
-    return "HI";
+    return user_pin;
 }
 
+QString LoginPageDialog::getUserRole()
+{
+    return user_role;
+}
+
+QString LoginPageDialog::getUserName()
+{
+    return user_name;
+}

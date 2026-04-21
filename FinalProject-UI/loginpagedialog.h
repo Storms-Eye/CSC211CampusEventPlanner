@@ -16,6 +16,8 @@ public:
     explicit LoginPageDialog(QWidget *parent = nullptr);
     ~LoginPageDialog();
     QString getUserID();
+    QString getUserRole();
+    QString getUserName();
     QString getPin();
 
 private slots:
@@ -24,6 +26,11 @@ private slots:
 private:
     Ui::LoginPageDialog *ui;
     QNetworkAccessManager *manager;
+
+    QString user_id;
+    QString user_role;
+    QString user_name;
+    QString user_pin;
 signals:
     void loginResponse(const QString &response);
 };
