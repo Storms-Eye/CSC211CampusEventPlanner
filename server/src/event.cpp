@@ -40,7 +40,8 @@ namespace EventManager
             return crow::response(repo.getEventWaitlist().dump(4));
         });
 
-        CROW_ROUTE(app, "/events/<int>").methods("POST"_method)([&repo](const crow::request &req, int id)
+		// PATCH existing event to be either Approved or Denied
+        CROW_ROUTE(app, "/events/<int>").methods("PATCH"_method)([&repo](const crow::request &req, int id)
         {
             json user = loginHelper(req, repo);
             if (user.is_null())
