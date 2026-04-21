@@ -9,17 +9,23 @@ CONFIG += c++20
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    createeventdialog.cpp \
+    eventapprovaldialog.cpp \
     loginpagedialog.cpp \
     main.cpp \
     mainwindow.cpp \
     registerdialog.cpp
 
 HEADERS += \
+    createeventdialog.h \
+    eventapprovaldialog.h \
     loginpagedialog.h \
     mainwindow.h \
     registerdialog.h
 
 FORMS += \
+    createeventdialog.ui \
+    eventapprovaldialog.ui \
     loginpagedialog.ui \
     mainwindow.ui \
     registerdialog.ui

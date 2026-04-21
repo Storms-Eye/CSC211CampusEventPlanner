@@ -63,3 +63,13 @@ void LoginPageDialog::on_loginButton_clicked()
     });
 }
 
+QString LoginPageDialog::getUserID()
+{
+    return "HI";
+}
+
+QString LoginPageDialog::getPin()
+{
+    return "HI";
+}
+

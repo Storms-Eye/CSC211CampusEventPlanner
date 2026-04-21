@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include "loginpagedialog.h"
 #include "registerdialog.h"
+#include "eventapprovaldialog.h"
+#include "createeventdialog.h"
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QMessageBox>
@@ -154,12 +156,12 @@ void MainWindow::on_functionButton_clicked()
     }
     else if (role == "moderator")
     {
-        createEventDialog c;
+        CreateEventDialog c;
         c.show();
     }
     else if (role == "admin")
     {
-        eventApprovalDialog e;
+        EventApprovalDialog e;
         e.show();
     }
 }
