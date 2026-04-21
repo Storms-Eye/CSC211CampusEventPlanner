@@ -97,7 +97,7 @@ void MainWindow::on_listButton_clicked()
                         QJsonObject obj = value.toObject();
                         if(checkSort(obj))
                         {
-                            returnText += obj["Name"].toString() + ", Capacity:  " + obj["Capacity"].toInt() + ") ";
+                            returnText += obj["Name"].toString() + ", Capacity:  " + QString::number(obj["Capacity"].toInt()) + ") ";
                             //if(role == "student") returnText += "[Approved] "
                             returnText += obj["Description"].toString() + "\n";
                             ui->outputBox->setPlainText(returnText);
@@ -124,7 +124,7 @@ void MainWindow::on_listButton_clicked()
                                 QJsonObject obj = value.toObject();
                                 if(checkSort(obj))
                                 {
-                                    returnText += obj["Name"].toString() + ", Capacity:  " + obj["Capacity"].toInt() + ") [In Queue] " +  obj["Description"].toString() + "\n";
+                                    returnText += obj["Name"].toString() + ", Capacity:  " + QString::number(obj["Capacity"].toInt()) + ") [In Queue] " +  obj["Description"].toString() + "\n";
 
                                 }
                             }
