@@ -177,7 +177,7 @@
      <string>ID</string>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="plainTextEdit">
+   <widget class="QPlainTextEdit" name="inputBox">
     <property name="geometry">
      <rect>
       <x>410</x>
