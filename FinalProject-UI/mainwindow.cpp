@@ -33,7 +33,7 @@ void MainWindow::acceptCredentials(const QString &acceptedID, const QString &acc
     role = acceptedRole;
     name = acceptedName;
     
-    ui->roleLabel->setText(role);
+    ui->roleLabel->setText(role + ":");
     ui->nameLabel->setText(name);
     
     if (role == "student")
@@ -97,7 +97,7 @@ void MainWindow::on_listButton_clicked()
                         QJsonObject obj = value.toObject();
                         if(checkSort(obj))
                         {
-                            returnText += obj["Name"].toString() + ", Capacity:  " + obj["Capacity"].toString() + ") ";
+                            returnText += obj["Name"].toString() + ", Capacity:  " + obj["Capacity"].toInt() + ") ";
                             //if(role == "student") returnText += "[Approved] "
                             returnText += obj["Description"].toString() + "\n";
                             ui->outputBox->setPlainText(returnText);
@@ -110,39 +110,40 @@ void MainWindow::on_listButton_clicked()
         {
             QMessageBox::warning(this, "POST Failed", reply1->errorString());
         }
-        reply1->deleteLater();
-    });
+        if(!(role == "student"))
+        {
+            QNetworkReply *reply2 = manager->sendCustomRequest(request2, "GET"); //again, maybe json
+            connect(reply2, &QNetworkReply::finished, this, [=]() mutable{
+                if(reply2->error() == QNetworkReply::NoError){
+                    QByteArray responseData2 = reply2->readAll();
+                    QJsonDocument jsonDoc2 = QJsonDocument::fromJson(responseData2);
+                    if (jsonDoc2.isArray()) {
+                        QJsonArray jsonArray2 = jsonDoc2.array();
+                        for (const QJsonValue &value : jsonArray2) {
+                            if (value.isObject()) {
+                                QJsonObject obj = value.toObject();
+                                if(checkSort(obj))
+                                {
+                                    returnText += obj["Name"].toString() + ", Capacity:  " + obj["Capacity"].toInt() + ") [In Queue] " +  obj["Description"].toString() + "\n";
 
-    if(!(role == "student"))
-    {
-        QNetworkReply *reply2 = manager->sendCustomRequest(request2, "GET"); //again, maybe json
-        connect(reply2, &QNetworkReply::finished, this, [=]() mutable{
-            if(reply2->error() == QNetworkReply::NoError){
-                QByteArray responseData2 = reply2->readAll();
-                QJsonDocument jsonDoc2 = QJsonDocument::fromJson(responseData2);
-                if (jsonDoc2.isArray()) {
-                    QJsonArray jsonArray2 = jsonDoc2.array();
-                    for (const QJsonValue &value : jsonArray2) {
-                        if (value.isObject()) {
-                            QJsonObject obj = value.toObject();
-                            if(checkSort(obj))
-                            {
-                                returnText += obj["Name"].toString() + ", Capacity:  " + obj["Capacity"].toString() + ") [In Queue] " +  obj["Description"].toString() + "\n";
-
+                                }
                             }
                         }
                     }
+
                 }
+                else
+                {
+                    QMessageBox::warning(this, "POST Failed", reply2->errorString());
+                }
+                reply2->deleteLater();
+            });
 
-            }
-            else
-            {
-                QMessageBox::warning(this, "POST Failed", reply2->errorString());
-            }
-            reply2->deleteLater();
-        });
+        }
+        reply1->deleteLater();
+    });
 
-    }
+
         return;
 }
 
