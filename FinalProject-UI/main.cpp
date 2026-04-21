@@ -20,7 +20,6 @@ int main(int argc, char *argv[])
 
     if (loginDialog.exec() == QDialog::Accepted)
     {
-        QMessageBox::information(&loginDialog, "Login", "Logged in." , QMessageBox::Ok);
         w.acceptCredentials(loginDialog.getUserID(), loginDialog.getPin(), loginDialog.getUserRole(), loginDialog.getUserName());
         w.show();
         return a.exec();
