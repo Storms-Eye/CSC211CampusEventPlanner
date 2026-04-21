@@ -171,3 +171,27 @@ void MainWindow::on_usersButton_clicked()
     //if admin, display all users
     //if student, display current user
 }
+
+void MainWindow::on_allButton_clicked()
+{
+    ui->allButton->setChecked(true);
+    ui->nameButton->setChecked(false);
+    ui->IDButton->setChecked(false);
+}
+
+
+void MainWindow::on_nameButton_clicked()
+{
+    ui->allButton->setChecked(false);
+    ui->nameButton->setChecked(true);
+    ui->IDButton->setChecked(false);
+}
+
+
+void MainWindow::on_IDButton_clicked()
+{
+    ui->allButton->setChecked(false);
+    ui->nameButton->setChecked(false);
+    ui->IDButton->setChecked(true);
+}
+

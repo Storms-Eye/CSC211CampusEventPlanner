@@ -25,6 +25,12 @@ private slots:
     void on_functionButton_clicked();
     void on_usersButton_clicked();
 
+    void on_allButton_clicked();
+
+    void on_nameButton_clicked();
+
+    void on_IDButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QNetworkAccessManager *manager;
