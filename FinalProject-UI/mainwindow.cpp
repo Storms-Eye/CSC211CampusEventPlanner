@@ -52,11 +52,11 @@ void MainWindow::acceptCredentials(const QString &acceptedID, const QString &acc
 
 bool MainWindow::checkSort(const QJsonObject& obj)
 {
-    QString check = ui->outputBox->toPlainText();
+    QString check = ui->inputBox->toPlainText();
     if(ui->nameButton->isEnabled())
     {
 
-        if(obj["name"] == check)
+        if(obj["Name"] == check)
         {
             return true;
         }
@@ -75,7 +75,7 @@ bool MainWindow::checkSort(const QJsonObject& obj)
 void MainWindow::on_listButton_clicked()
 {
     QUrl url1("http://localhost:18080/approvedEvents");
-    QUrl url2("http://localhost:18080/eventWaitList");
+    QUrl url2("http://localhost:18080/eventWaitlist");
     QNetworkRequest request1(url1);
     QNetworkRequest request2(url2);
     request1.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
