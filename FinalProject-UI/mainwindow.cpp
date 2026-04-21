@@ -48,6 +48,11 @@ void MainWindow::acceptCredentials(const QString &acceptedID, const QString &acc
     {
         ui->functionButton->setText("Approve/Deny Event");
     }
+
+    if(role != "admin")
+    {
+        ui->usersButton->setVisible(false);
+    }
 }
 
 bool MainWindow::checkSort(const QJsonObject& obj)
@@ -103,8 +108,9 @@ void MainWindow::on_listButton_clicked()
                         QJsonObject obj = value.toObject();
                         if(checkSort(obj))
                         {
-                            approvedText += obj["Name"].toString() + ", Capacity:  " + QString::number(obj["Capacity"].toInt()) + ") ";
-                            approvedText += obj["Description"].toString() + "\n";
+                            approvedText += obj["Name"].toString() + ", Capacity:  " + QString::number(obj["Capacity"].toInt()) + ", ";
+                            if(!(role == "student")) approvedText += "[Approved],  ";
+                            approvedText += obj["Description"].toString() + ", ID: " + QString::number(obj["EventId"].toInt()) + "\n";
                         }
                     }
                 }
@@ -139,7 +145,7 @@ void MainWindow::on_listButton_clicked()
                                 QJsonObject obj = value.toObject();
                                 if(checkSort(obj))
                                 {
-                                    waitlistText += obj["Name"].toString() + ", Capacity:  " + QString::number(obj["Capacity"].toInt()) + ") [In Queue] " +  obj["Description"].toString() + "\n";
+                                    waitlistText += obj["Name"].toString() + ", Capacity:  " + QString::number(obj["Capacity"].toInt()) + ", [In Queue], " +  obj["Description"].toString() + ", ID: " + QString::number(obj["EventId"].toInt()) + "\n";
                                 }
                             }
                         }
