@@ -84,17 +84,25 @@ bool JsonRepository::createNewEvent(json &user, std::string name, int capacity, 
             {"Description", description},
             {"Waitlist", json::array()},
             {"Capacity", capacity},
-            {"EventId", eventId}
+            {"EventId", eventId},
+						{"Date", date}
         };
     json userEvent =
         {
             {"eventId", eventId},
             {"status", "Pending"}
         };
-    user["events"].push_back(userEvent);
 
     database["eventWaitlist"].push_back(event);
-		
+		for(auto &u : users)
+		{
+			if(u["id"] == user["id"])
+			{
+				user["events"].push_back(userEvent);
+				break;
+			}
+		}
+		database["meta"]["nextPendingEventId"] = eventId+1;
     return true;
 }
 

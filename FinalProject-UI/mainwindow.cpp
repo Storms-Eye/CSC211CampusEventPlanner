@@ -2,8 +2,8 @@
 #include "ui_mainwindow.h"
 #include "loginpagedialog.h"
 #include "registerdialog.h"
-#include "eventapprovaldialog.h"
 #include "createeventdialog.h"
+#include "eventapprovaldialog.h"
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QMessageBox>
@@ -110,7 +110,7 @@ void MainWindow::on_listButton_clicked()
                         {
                             approvedText += obj["Name"].toString() + ", Capacity:  " + QString::number(obj["Capacity"].toInt()) + ", ";
                             if(!(role == "student")) approvedText += "[Approved],  ";
-                            approvedText += obj["Description"].toString() + ", ID: " + QString::number(obj["EventId"].toInt()) + "\n";
+                            approvedText += obj["Description"].toString() + ", ID: " + QString::number(obj["EventId"].toInt()) + ", Date: " + obj["Date"].toString()+ "\n";
                         }
                     }
                 }
@@ -145,7 +145,7 @@ void MainWindow::on_listButton_clicked()
                                 QJsonObject obj = value.toObject();
                                 if(checkSort(obj))
                                 {
-                                    waitlistText += obj["Name"].toString() + ", Capacity:  " + QString::number(obj["Capacity"].toInt()) + ", [In Queue], " +  obj["Description"].toString() + ", ID: " + QString::number(obj["EventId"].toInt()) + "\n";
+                                    waitlistText += obj["Name"].toString() + ", Capacity:  " + QString::number(obj["Capacity"].toInt()) + ", [In Queue], " +  obj["Description"].toString() + ", ID: " + QString::number(obj["EventId"].toInt()) + ", Date: " + obj["Date"].toString()+ "\n";
                                 }
                             }
                         }
@@ -173,7 +173,7 @@ void MainWindow::on_functionButton_clicked()
     }
     else if (role == "moderator")
     {
-        CreateEventDialog c;
+        CreateEventDialog c(this, userID, pin);
         c.exec();
     }
     else if (role == "admin")
