@@ -168,7 +168,7 @@ void MainWindow::on_functionButton_clicked()
     // these dialogs/classes have not been created yet
     if (role == "student")
     {
-        registerDialog r;
+        registerDialog r(this, userID, pin);
         r.exec();
     }
     else if (role == "moderator")

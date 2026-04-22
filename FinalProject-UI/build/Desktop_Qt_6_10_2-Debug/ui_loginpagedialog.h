@@ -11,7 +11,6 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
@@ -27,7 +26,6 @@ public:
     QLabel *label;
     QLabel *label_2;
     QPushButton *loginButton;
-    QComboBox *comboBox;
 
     void setupUi(QDialog *LoginPageDialog)
     {
@@ -46,20 +44,16 @@ public:
         QFont font;
         font.setPointSize(14);
         label->setFont(font);
-        label->setAlignment(Qt::AlignmentFlag::AlignCenter);
+        label->setAlignment(Qt::AlignCenter);
         label_2 = new QLabel(LoginPageDialog);
         label_2->setObjectName("label_2");
         label_2->setGeometry(QRect(80, 120, 91, 21));
         label_2->setFont(font);
-        label_2->setAlignment(Qt::AlignmentFlag::AlignCenter);
+        label_2->setAlignment(Qt::AlignCenter);
         loginButton = new QPushButton(LoginPageDialog);
         loginButton->setObjectName("loginButton");
         loginButton->setGeometry(QRect(90, 190, 191, 61));
         loginButton->setFont(font);
-        comboBox = new QComboBox(LoginPageDialog);
-        comboBox->setObjectName("comboBox");
-        comboBox->setGeometry(QRect(290, 230, 71, 21));
-        comboBox->setEditable(true);
 
         retranslateUi(LoginPageDialog);
 
@@ -72,7 +66,6 @@ public:
         label->setText(QCoreApplication::translate("LoginPageDialog", "User ID:", nullptr));
         label_2->setText(QCoreApplication::translate("LoginPageDialog", "Pin:", nullptr));
         loginButton->setText(QCoreApplication::translate("LoginPageDialog", "Login", nullptr));
-        comboBox->setCurrentText(QCoreApplication::translate("LoginPageDialog", "charlie", nullptr));
     } // retranslateUi
 
 };

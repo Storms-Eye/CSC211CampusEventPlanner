@@ -9,7 +9,7 @@ int main()
 {
     crow::SimpleApp app;
 
-    JsonRepository repo("./data.json", "../user.json");
+    JsonRepository repo("./data.json", "./user.json");
 
     EventManager::registerEventRoutes(app, repo);
 
@@ -119,8 +119,7 @@ int main()
         return crow::response(repo.getUserHistory().dump(4));
     });
 
-    // REGISTRATION FUNCTION - also not my particular field, just showing how capacity limit will be enforced
-    // URL may need to be adjusted
+    // Registration route for students. Path preserved for compatibility.
     CROW_ROUTE(app, "/register/<int>").methods("PATCH"_method)([&repo](const crow::request &req, int id)
     {
         json user = loginHelper(req, repo);

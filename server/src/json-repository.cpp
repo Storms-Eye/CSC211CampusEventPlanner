@@ -84,6 +84,7 @@ bool JsonRepository::createNewEvent(json &user, std::string name, int capacity, 
             {"Description", description},
             {"Waitlist", json::array()},
             {"Capacity", capacity},
+            {"totalUsers", 0},
             {"EventId", eventId},
 						{"Date", date}
         };
@@ -159,7 +160,7 @@ json JsonRepository::approvalFunc(int id, bool isApproved)
     // search through the eventWaitlist for the event
     for (auto &item : eventWaitlist)
     {
-        if (item["id"] == id)
+        if (item["EventId"] == id)
         {
             // if the admin has approved the event, send it to "approvedEvents"
             if (isApproved)
@@ -192,11 +193,12 @@ json JsonRepository::approvalFunc(int id, bool isApproved)
                 };
             }
         }
-        return {
-            {"success", false},
-            {"message", "\nAn event matching this ID does not exist\n"}
-        };
     }
+
+    return {
+        {"success", false},
+        {"message", "\nAn event matching this ID does not exist\n"}
+    };
 }
 
 // check if an event if at capacity when a student is added
@@ -274,6 +276,121 @@ json JsonRepository::getValueById(json &dataset, std::string reference, int id)
         }
     }
     return json(); // maybe this doesn't need for loop?
+}
+
+bool JsonRepository::registerStudentForEvent(int eventId, const std::string &userId, std::string &message)
+{
+    auto &events = database["approvedEvents"];
+    for (auto &event : events)
+    {
+        if (event["EventId"] == eventId)
+        {
+            if (!event.contains("Waitlist") || !event["Waitlist"].is_array())
+            {
+                event["Waitlist"] = json::array();
+            }
+
+            for (auto &entry : event["Waitlist"])
+            {
+                if (entry["userId"] == userId)
+                {
+                    message = "User already registered for this event.";
+                    return false;
+                }
+            }
+
+            int capacity = event.value("Capacity", 0);
+            int attendingCount = 0;
+            for (auto &entry : event["Waitlist"])
+            {
+                if (entry.value("attendance", "") == "Attending")
+                {
+                    attendingCount++;
+                }
+            }
+
+            json newEntry = { {"userId", userId} };
+            if (attendingCount >= capacity)
+            {
+                newEntry["attendance"] = "Waitlisted";
+                message = "Event is full. User has been added to the waitlist.";
+            }
+            else
+            {
+                newEntry["attendance"] = "Attending";
+                message = "User successfully registered for the event.";
+            }
+
+            event["Waitlist"].push_back(newEntry);
+            event["totalUsers"] = event["Waitlist"].size();
+            save();
+            return true;
+        }
+    }
+
+    message = "Event not found.";
+    return false;
+}
+
+bool JsonRepository::deregisterStudentFromEvent(int eventId, const std::string &userId, std::string &message)
+{
+    auto &events = database["approvedEvents"];
+    for (auto &event : events)
+    {
+        if (event["EventId"] == eventId)
+        {
+            if (!event.contains("Waitlist") || !event["Waitlist"].is_array())
+            {
+                message = "No registrations exist for this event.";
+                return false;
+            }
+
+            auto &waitlist = event["Waitlist"];
+            bool found = false;
+            bool wasAttending = false;
+            for (auto it = waitlist.begin(); it != waitlist.end(); ++it)
+            {
+                if ((*it)["userId"] == userId)
+                {
+                    wasAttending = (*it).value("attendance", "") == "Attending";
+                    waitlist.erase(it);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                message = "User is not registered for this event.";
+                return false;
+            }
+
+            if (wasAttending)
+            {
+                for (auto &entry : waitlist)
+                {
+                    if (entry.value("attendance", "") == "Waitlisted")
+                    {
+                        entry["attendance"] = "Attending";
+                        message = "User deregistered. A waitlisted student has been promoted to attending.";
+                        break;
+                    }
+                }
+            }
+
+            if (message.empty())
+            {
+                message = "User successfully deregistered from the event.";
+            }
+
+            event["totalUsers"] = waitlist.size();
+            save();
+            return true;
+        }
+    }
+
+    message = "Event not found.";
+    return false;
 }
 
 void JsonRepository::eventHistoryUpdate(int eventID)

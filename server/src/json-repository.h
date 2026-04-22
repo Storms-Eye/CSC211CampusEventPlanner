@@ -42,6 +42,8 @@ public:
     json getAllTransactions();
     json getAttendance();
     json getValueById(json &dataset, std::string reference, int id);
+    bool registerStudentForEvent(int eventId, const std::string &userId, std::string &message);
+    bool deregisterStudentFromEvent(int eventId, const std::string &userId, std::string &message);
 
     // Not yet written.
     json getValuesByFunction(json &dataset, auto func, int variable);
