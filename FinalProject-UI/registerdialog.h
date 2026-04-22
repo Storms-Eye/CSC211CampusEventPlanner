@@ -13,7 +13,7 @@ class registerDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit registerDialog(QWidget *parent = nullptr);
+    explicit registerDialog(QWidget *parent = nullptr, const QString &userID = QString(), const QString &pin = QString());
     ~registerDialog();
 
 private slots:
@@ -22,6 +22,8 @@ private slots:
 private:
     Ui::registerDialog *ui;
     QNetworkAccessManager *manager;
+    QString userID;
+    QString pin;
 };
 
 #endif // REGISTERDIALOG_H

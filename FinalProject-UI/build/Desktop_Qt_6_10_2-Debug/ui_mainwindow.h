@@ -12,10 +12,11 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QLabel>
-#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTextBrowser>
 #include <QtWidgets/QWidget>
@@ -26,12 +27,17 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
-    QLineEdit *eventIdInput;
-    QLabel *label;
-    QPushButton *approveButton;
-    QPushButton *denyButton;
-    QTextBrowser *textBrowser;
+    QPushButton *functionButton;
+    QTextBrowser *outputBox;
     QPushButton *listButton;
+    QLabel *roleLabel;
+    QLabel *nameLabel;
+    QPushButton *usersButton;
+    QLabel *label;
+    QRadioButton *allButton;
+    QRadioButton *nameButton;
+    QRadioButton *IDButton;
+    QPlainTextEdit *inputBox;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -42,31 +48,52 @@ public:
         MainWindow->resize(798, 712);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
-        eventIdInput = new QLineEdit(centralwidget);
-        eventIdInput->setObjectName("eventIdInput");
-        eventIdInput->setGeometry(QRect(392, 40, 141, 31));
-        label = new QLabel(centralwidget);
-        label->setObjectName("label");
-        label->setGeometry(QRect(210, 40, 141, 31));
+        functionButton = new QPushButton(centralwidget);
+        functionButton->setObjectName("functionButton");
+        functionButton->setGeometry(QRect(300, 600, 181, 51));
         QFont font;
         font.setPointSize(14);
-        label->setFont(font);
-        label->setAlignment(Qt::AlignmentFlag::AlignCenter);
-        approveButton = new QPushButton(centralwidget);
-        approveButton->setObjectName("approveButton");
-        approveButton->setGeometry(QRect(160, 110, 181, 51));
-        approveButton->setFont(font);
-        denyButton = new QPushButton(centralwidget);
-        denyButton->setObjectName("denyButton");
-        denyButton->setGeometry(QRect(400, 110, 181, 51));
-        denyButton->setFont(font);
-        textBrowser = new QTextBrowser(centralwidget);
-        textBrowser->setObjectName("textBrowser");
-        textBrowser->setGeometry(QRect(40, 270, 701, 361));
+        functionButton->setFont(font);
+        outputBox = new QTextBrowser(centralwidget);
+        outputBox->setObjectName("outputBox");
+        outputBox->setGeometry(QRect(40, 210, 701, 361));
         listButton = new QPushButton(centralwidget);
         listButton->setObjectName("listButton");
-        listButton->setGeometry(QRect(270, 190, 191, 51));
+        listButton->setGeometry(QRect(70, 60, 191, 51));
         listButton->setFont(font);
+        roleLabel = new QLabel(centralwidget);
+        roleLabel->setObjectName("roleLabel");
+        roleLabel->setGeometry(QRect(240, 20, 121, 31));
+        roleLabel->setFont(font);
+        roleLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        nameLabel = new QLabel(centralwidget);
+        nameLabel->setObjectName("nameLabel");
+        nameLabel->setEnabled(true);
+        nameLabel->setGeometry(QRect(370, 20, 401, 31));
+        nameLabel->setFont(font);
+        nameLabel->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
+        usersButton = new QPushButton(centralwidget);
+        usersButton->setObjectName("usersButton");
+        usersButton->setGeometry(QRect(70, 130, 191, 51));
+        usersButton->setFont(font);
+        label = new QLabel(centralwidget);
+        label->setObjectName("label");
+        label->setGeometry(QRect(330, 70, 81, 31));
+        label->setFont(font);
+        allButton = new QRadioButton(centralwidget);
+        allButton->setObjectName("allButton");
+        allButton->setGeometry(QRect(330, 100, 95, 22));
+        allButton->setChecked(true);
+        nameButton = new QRadioButton(centralwidget);
+        nameButton->setObjectName("nameButton");
+        nameButton->setGeometry(QRect(330, 130, 95, 22));
+        IDButton = new QRadioButton(centralwidget);
+        IDButton->setObjectName("IDButton");
+        IDButton->setGeometry(QRect(330, 160, 95, 22));
+        inputBox = new QPlainTextEdit(centralwidget);
+        inputBox->setObjectName("inputBox");
+        inputBox->setGeometry(QRect(410, 70, 111, 111));
+        inputBox->setFont(font);
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
@@ -84,10 +111,16 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
-        label->setText(QCoreApplication::translate("MainWindow", "Enter Event ID:", nullptr));
-        approveButton->setText(QCoreApplication::translate("MainWindow", "Approve Event", nullptr));
-        denyButton->setText(QCoreApplication::translate("MainWindow", "Deny Event", nullptr));
-        listButton->setText(QCoreApplication::translate("MainWindow", "List Events", nullptr));
+        functionButton->setText(QCoreApplication::translate("MainWindow", "Function Button", nullptr));
+        listButton->setText(QCoreApplication::translate("MainWindow", "View Events", nullptr));
+        roleLabel->setText(QCoreApplication::translate("MainWindow", "Role:", nullptr));
+        nameLabel->setText(QCoreApplication::translate("MainWindow", "Name", nullptr));
+        usersButton->setText(QCoreApplication::translate("MainWindow", "View Users", nullptr));
+        label->setText(QCoreApplication::translate("MainWindow", "Find  by", nullptr));
+        allButton->setText(QCoreApplication::translate("MainWindow", "All", nullptr));
+        nameButton->setText(QCoreApplication::translate("MainWindow", "Name", nullptr));
+        IDButton->setText(QCoreApplication::translate("MainWindow", "ID", nullptr));
+        inputBox->setPlaceholderText(QCoreApplication::translate("MainWindow", "Input", nullptr));
     } // retranslateUi
 
 };

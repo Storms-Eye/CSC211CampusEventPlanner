@@ -184,13 +184,16 @@ json JsonRepository::approvalFunc(int id, bool isApproved)
                 eventHistory.push_back(newEvent);
                 eventWaitlist.erase(it);
                 save();
-                return {{"success", true}, {"message", "\nEvent has been denied\n"}};
+                return {
+                    {"success", true},
+                    {"message", "\nEvent has been denied\n"}
+                };
             }
         }
     }
 
     return {
-        {"success", false},
+        {"success", false}
         {"message", "\nAn event matching this ID does not exist\n"}
     };
 }

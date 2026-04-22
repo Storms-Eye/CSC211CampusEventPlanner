@@ -123,5 +123,59 @@ namespace EventManager
                 return crow::response(500, "Failed to link event to user account");
             }
         });
+
+        CROW_ROUTE(app, "/events/<int>/register").methods("PATCH"_method)([&repo](const crow::request &req, int eventID)
+        {
+            json user = loginHelper(req, repo);
+            if (user.is_null())
+            {
+                crow::response res(403);
+                res.set_header("Content-Type", "application/json");
+                res.write(json({{"error", "Unauthorized login attempt"}}).dump());
+                return res;
+            }
+
+            std::string userId = user["id"];
+            json result = studentRegister(repo, eventID, userId);
+            int responseCode = result.value("success", false) ? 200 : 400;
+            crow::response res(responseCode);
+            res.set_header("Content-Type", "application/json");
+            res.write(result.dump(4));
+            return res;
+        });
+
+        CROW_ROUTE(app, "/events/<int>/deregister").methods("PATCH"_method)([&repo](const crow::request &req, int eventID)
+        {
+            json user = loginHelper(req, repo);
+            if (user.is_null())
+            {
+                crow::response res(403);
+                res.set_header("Content-Type", "application/json");
+                res.write(json({{"error", "Unauthorized login attempt"}}).dump());
+                return res;
+            }
+
+            std::string userId = user["id"];
+            json result = studentDeregister(repo, eventID, userId);
+            int responseCode = result.value("success", false) ? 200 : 400;
+            crow::response res(responseCode);
+            res.set_header("Content-Type", "application/json");
+            res.write(result.dump(4));
+            return res;
+        });
+    }
+
+    json studentRegister(JsonRepository &repo, int eventID, const std::string &userId)
+    {
+        std::string message;
+        bool success = repo.registerStudentForEvent(eventID, userId, message);
+        return json({{"success", success}, {"message", message}});
+    }
+
+    json studentDeregister(JsonRepository &repo, int eventID, const std::string &userId)
+    {
+        std::string message;
+        bool success = repo.deregisterStudentFromEvent(eventID, userId, message);
+        return json({{"success", success}, {"message", message}});
     }
 }

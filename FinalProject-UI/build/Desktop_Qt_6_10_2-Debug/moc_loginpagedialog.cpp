@@ -40,13 +40,19 @@ template <> constexpr inline auto LoginPageDialog::qt_create_metaobjectdata<qt_m
     namespace QMC = QtMocConstants;
     QtMocHelpers::StringRefStorage qt_stringData {
         "LoginPageDialog",
-        "on_loginButton_clicked",
-        ""
+        "loginResponse",
+        "",
+        "response",
+        "on_loginButton_clicked"
     };
 
     QtMocHelpers::UintData qt_methods {
+        // Signal 'loginResponse'
+        QtMocHelpers::SignalData<void(const QString &)>(1, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::QString, 3 },
+        }}),
         // Slot 'on_loginButton_clicked'
-        QtMocHelpers::SlotData<void()>(1, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(4, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -70,11 +76,15 @@ void LoginPageDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
     auto *_t = static_cast<LoginPageDialog *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->on_loginButton_clicked(); break;
+        case 0: _t->loginResponse((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1]))); break;
+        case 1: _t->on_loginButton_clicked(); break;
         default: ;
         }
     }
-    (void)_a;
+    if (_c == QMetaObject::IndexOfMethod) {
+        if (QtMocHelpers::indexOfMethod<void (LoginPageDialog::*)(const QString & )>(_a, &LoginPageDialog::loginResponse, 0))
+            return;
+    }
 }
 
 const QMetaObject *LoginPageDialog::metaObject() const
@@ -96,15 +106,21 @@ int LoginPageDialog::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 1)
+        if (_id < 2)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 1;
+        _id -= 2;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 1)
+        if (_id < 2)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 1;
+        _id -= 2;
     }
     return _id;
+}
+
+// SIGNAL 0
+void LoginPageDialog::loginResponse(const QString & _t1)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 0, nullptr, _t1);
 }
 QT_WARNING_POP

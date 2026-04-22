@@ -40,19 +40,35 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
     namespace QMC = QtMocConstants;
     QtMocHelpers::StringRefStorage qt_stringData {
         "MainWindow",
-        "on_approveButton_clicked",
+        "checkSort",
         "",
-        "on_denyButton_clicked",
-        "on_listButton_clicked"
+        "QJsonObject",
+        "obj",
+        "on_listButton_clicked",
+        "on_functionButton_clicked",
+        "on_usersButton_clicked",
+        "on_allButton_clicked",
+        "on_nameButton_clicked",
+        "on_IDButton_clicked"
     };
 
     QtMocHelpers::UintData qt_methods {
-        // Slot 'on_approveButton_clicked'
-        QtMocHelpers::SlotData<void()>(1, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'on_denyButton_clicked'
-        QtMocHelpers::SlotData<void()>(3, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'checkSort'
+        QtMocHelpers::SlotData<bool(const QJsonObject &)>(1, 2, QMC::AccessPrivate, QMetaType::Bool, {{
+            { 0x80000000 | 3, 4 },
+        }}),
         // Slot 'on_listButton_clicked'
-        QtMocHelpers::SlotData<void()>(4, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(5, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'on_functionButton_clicked'
+        QtMocHelpers::SlotData<void()>(6, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'on_usersButton_clicked'
+        QtMocHelpers::SlotData<void()>(7, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'on_allButton_clicked'
+        QtMocHelpers::SlotData<void()>(8, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'on_nameButton_clicked'
+        QtMocHelpers::SlotData<void()>(9, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'on_IDButton_clicked'
+        QtMocHelpers::SlotData<void()>(10, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -76,13 +92,17 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
     auto *_t = static_cast<MainWindow *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->on_approveButton_clicked(); break;
-        case 1: _t->on_denyButton_clicked(); break;
-        case 2: _t->on_listButton_clicked(); break;
+        case 0: { bool _r = _t->checkSort((*reinterpret_cast<std::add_pointer_t<QJsonObject>>(_a[1])));
+            if (_a[0]) *reinterpret_cast<bool*>(_a[0]) = std::move(_r); }  break;
+        case 1: _t->on_listButton_clicked(); break;
+        case 2: _t->on_functionButton_clicked(); break;
+        case 3: _t->on_usersButton_clicked(); break;
+        case 4: _t->on_allButton_clicked(); break;
+        case 5: _t->on_nameButton_clicked(); break;
+        case 6: _t->on_IDButton_clicked(); break;
         default: ;
         }
     }
-    (void)_a;
 }
 
 const QMetaObject *MainWindow::metaObject() const
@@ -104,14 +124,14 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 3)
+        if (_id < 7)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 3;
+        _id -= 7;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 3)
+        if (_id < 7)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 3;
+        _id -= 7;
     }
     return _id;
 }
