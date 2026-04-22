@@ -18,7 +18,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void acceptCredentials(const QString &acceptedID, const QString &acceptedPin, const QString &acceptedRole, const QString &acceptedName);
-
+    QString userID;
 private slots:
     bool checkSort(const QJsonObject& obj);
     void on_listButton_clicked();
@@ -34,7 +34,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QNetworkAccessManager *manager;
-    QString userID;
+
     QString pin;
     QString name;
     QString role;
