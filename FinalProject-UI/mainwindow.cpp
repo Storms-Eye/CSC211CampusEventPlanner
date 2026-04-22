@@ -48,11 +48,6 @@ void MainWindow::acceptCredentials(const QString &acceptedID, const QString &acc
     {
         ui->functionButton->setText("Approve/Deny Event");
     }
-
-    if(role != "admin")
-    {
-        ui->usersButton->setVisible(false);
-    }
 }
 
 bool MainWindow::checkSort(const QJsonObject& obj)
@@ -183,11 +178,6 @@ void MainWindow::on_functionButton_clicked()
     }
 }
 
-void MainWindow::on_usersButton_clicked()
-{
-    //if admin, display all users
-    //if student, display current user
-}
 
 void MainWindow::on_allButton_clicked()
 {
