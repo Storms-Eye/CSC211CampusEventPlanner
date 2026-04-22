@@ -1,49 +1,48 @@
 {
-	"meta": {
-		"availableIndexes": [],
-		"nextPendingEventId": 2,
-		"nextApprovedEventId": 2,
-		"nextUserId": 1,
-		"nextTransactionId": 1
-	},
-	"eventWaitlist": [
-		{
-			"Name": "name",
-			"Description": "Why it needs to happen",
-			"Waitlist": [],
-			"Capacity": 40,
-			"EventId": 1
-		}
-	],
-	"userWaitlist": [
-		{}
-	],
-	"approvedEvents": [
-		{
-			"Name": "Game Jam",
-			"Description": "Coders to show off current projects",
-			"Waitlist": [
-				{
-					"userId": "1234567",
-					"attendance": "Attending"
-				},
-				{
-					"userId": "7654321",
-					"attendance": "Attending"
-				}
-			],
-			"totalUsers": 2,
-			"Capacity": 15,
-			"EventId": 1
-		}
-	],
-	"eventHistory": [
-		{}
-	],
-	"transactions": [
-		{}
-	],
-	"attendance": [
-		{}
-	]
+    "approvedEvents": [
+        {
+            "Capacity": 15,
+            "Description": "Coders to show off current projects",
+            "EventId": 1,
+            "Name": "Game Jam",
+            "Waitlist": [
+                {
+                    "attendance": "Attending",
+                    "userId": "7654321"
+                },
+                {
+                    "attendance": "Attending",
+                    "userId": "1234567"
+                }
+            ],
+            "totalUsers": 2
+        },
+        {
+            "Capacity": 40,
+            "Description": "Why it needs to happen",
+            "EventId": 1,
+            "Name": "name",
+            "Waitlist": []
+        }
+    ],
+    "attendance": [
+        {}
+    ],
+    "eventHistory": [
+        {}
+    ],
+    "eventWaitlist": [],
+    "meta": {
+        "availableIndexes": [],
+        "nextApprovedEventId": 2,
+        "nextPendingEventId": 2,
+        "nextTransactionId": 1,
+        "nextUserId": 1
+    },
+    "transactions": [
+        {}
+    ],
+    "userWaitlist": [
+        {}
+    ]
 }

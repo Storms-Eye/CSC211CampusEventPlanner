@@ -178,7 +178,7 @@ void MainWindow::on_functionButton_clicked()
     }
     else if (role == "admin")
     {
-        EventApprovalDialog e;
+        EventApprovalDialog e(this, userID, pin);
         e.exec();
     }
 }

@@ -9,7 +9,7 @@ int main()
 {
     crow::SimpleApp app;
 
-    JsonRepository repo("./data.json", "./user.json");
+    JsonRepository repo("../data.json", "../user.json");
 
     EventManager::registerEventRoutes(app, repo);
 

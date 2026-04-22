@@ -9,7 +9,6 @@
 #include <QUrl>
 #include <QDebug>
 #include <QJsonObject>
-#include <QTime>
 CreateEventDialog::CreateEventDialog(QWidget *parent, const QString &userID, const QString &pin)
     : QDialog(parent)
     , ui(new Ui::CreateEventDialog)
@@ -49,6 +48,7 @@ void CreateEventDialog::on_eventSubmitButton_clicked()
         else
         {
             QMessageBox::warning(this, "GET Approved Failed", reply->errorString());
+            close();
         }
         reply->deleteLater();
     });
