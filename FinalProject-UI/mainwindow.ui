@@ -45,10 +45,10 @@
    <widget class="QPushButton" name="listButton">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>60</y>
+      <x>40</x>
+      <y>140</y>
       <width>191</width>
-      <height>51</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="font">
@@ -63,15 +63,15 @@
    <widget class="QLabel" name="roleLabel">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>20</y>
+      <x>40</x>
+      <y>10</y>
       <width>121</width>
-      <height>31</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>26</pointsize>
      </font>
     </property>
     <property name="text">
@@ -87,15 +87,15 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>20</y>
+      <x>170</x>
+      <y>10</y>
       <width>401</width>
-      <height>31</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>26</pointsize>
      </font>
     </property>
     <property name="text">
@@ -105,29 +105,11 @@
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
     </property>
    </widget>
-   <widget class="QPushButton" name="usersButton">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>130</y>
-      <width>191</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>View Users</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>70</y>
+      <x>630</x>
+      <y>50</y>
       <width>81</width>
       <height>31</height>
      </rect>
@@ -144,8 +126,8 @@
    <widget class="QRadioButton" name="allButton">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>100</y>
+      <x>570</x>
+      <y>90</y>
       <width>95</width>
       <height>22</height>
      </rect>
@@ -160,8 +142,8 @@
    <widget class="QRadioButton" name="nameButton">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>130</y>
+      <x>570</x>
+      <y>110</y>
       <width>95</width>
       <height>22</height>
      </rect>
@@ -173,8 +155,8 @@
    <widget class="QRadioButton" name="IDButton">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>160</y>
+      <x>570</x>
+      <y>130</y>
       <width>95</width>
       <height>22</height>
      </rect>
@@ -186,8 +168,8 @@
    <widget class="QPlainTextEdit" name="inputBox">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>70</y>
+      <x>630</x>
+      <y>90</y>
       <width>111</width>
       <height>111</height>
      </rect>
